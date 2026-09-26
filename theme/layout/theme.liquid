@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>
+      {%- if page_title -%}
+        {{ page_title }}{% unless page_title contains 'LAFLARE' %} · LAFLARECLUB{% endunless %}
+      {%- else -%}
+        {{ 'general.meta.title' | t }}
+      {%- endif -%}
+    </title>
+    {% if page_description %}
+      <meta name="description" content="{{ page_description | escape }}">
+    {% else %}
+      <meta name="description" content="{{ 'general.meta.description' | t }}">
+    {% endif %}
+    <link rel="canonical" href="{{ canonical_url }}">
+    <meta property="og:site_name" content="{{ shop.name }}">
+    <meta property="og:title" content="{{ page_title | escape }}">
+    <meta property="og:type" content="{% if request.page_type == 'product' %}product{% else %}website{% endif %}">
+    <meta property="og:url" content="{{ canonical_url }}">
+    {% if page_description %}
+      <meta property="og:description" content="{{ page_description | escape }}">
+    {% endif %}
+    {% if page_image %}
+      <meta property="og:image" content="{{ page_image | image_url: width: 1200 }}">
+    {% endif %}
+    <meta name="twitter:card" content="summary_large_image">
+    {{ content_for_header }}
+    {{ 'shop.css' | asset_url | stylesheet_tag }}
+    {% render 'fonts' %}
+  </head>
+  <body
+    class="template-{{ template | split: '.' | first | replace: '/', '-' }}"
+    data-template="{{ request.page_type }}"
+    data-preview="false"
+  >
+    <style>:root { --cursor: url('{{ 'cursor.svg' | asset_url }}') 4 2, auto; --cursor-hover: url('{{ 'cursor.svg' | asset_url }}') 4 2, auto; }</style>
+    <a class="skip-link" href="#Main">{{ 'general.accessibility.skip' | t }}</a>
+    {{ content_for_layout }}
+    <script src="{{ 'shop.js' | asset_url }}" defer></script>
+  </body>
+</html>

@@ -1,0 +1,89 @@
+{
+  "general": {
+    "meta": {
+      "title": "LAFLARECLUB",
+      "description": "Luxury streetwear z hudební kultury. Limitované dropy, organická bavlna."
+    },
+    "accessibility": {
+      "skip": "Přeskočit na obsah",
+      "menu": "Menu",
+      "back": "Back",
+      "close": "Zavřít",
+      "previous": "Předchozí",
+      "next": "Další",
+      "down": "Další položka",
+      "select": "Vybrat",
+      "cart": "Košík",
+      "about": "About",
+      "legals": "Legals",
+      "account_cart": "Účet a košík",
+      "open_product": "Otevřít {{ title }}"
+    }
+  },
+  "about": {
+    "contact_label": "O nás a kontakt",
+    "lead": "LAFLARECLUB je luxury streetwear z hudební kultury. Značku vlastní a provozuje Jaromír Machalíček jako OSVČ v České republice.",
+    "owner_heading": "Majitel",
+    "owner": "Majitel",
+    "contact_heading": "Kontakt",
+    "ico": "IČO",
+    "form": "Právní forma",
+    "form_value": "Fyzická osoba podnikající dle živnostenského zákona (OSVČ)",
+    "since": "Datum vzniku",
+    "address": "Sídlo podnikání",
+    "country": "Česká republika",
+    "email": "E-mail",
+    "registry": "Veřejný rejstřík"
+  },
+  "legals": {
+    "label": "Právní dokumenty",
+    "lead": "Všechny povinné právní informace pro nákup na LAFLARECLUB.",
+    "terms": "Obchodní podmínky",
+    "terms_note": "Podmínky nákupu a povinnosti zákazníka",
+    "privacy": "Ochrana osobních údajů",
+    "privacy_note": "Zpracování osobních údajů (GDPR)",
+    "shipping": "Doprava a platba",
+    "shipping_note": "Způsoby doručení, lhůty a platby",
+    "returns": "Reklamace a vrácení",
+    "returns_note": "Odstoupení od smlouvy, výměny a reklamace",
+    "cookies": "Zásady cookies",
+    "cookies_note": "Jak tento web používá cookies",
+    "back": "← Legals",
+    "empty": "Doplňte právní texty v Shopify Admin → Nastavení → Zásady. Volitelná stránka cookies: handle cookies."
+  },
+  "product": {
+    "size": "Velikost",
+    "add": "Do košíku",
+    "sold_out": "Vyprodáno",
+    "more": "Více info",
+    "less": "Méně info",
+    "unavailable": "Nedostupné"
+  },
+  "cart": {
+    "title": "Košík",
+    "empty": "Košík je prázdný",
+    "checkout": "Pokladna",
+    "remove": "Odebrat",
+    "quantity": "Množství",
+    "qty_up": "Zvýšit množství",
+    "qty_down": "Snížit množství",
+    "preview_checkout": "Náhled. Nahrajte téma do Shopify pro objednávku."
+  },
+  "search": {
+    "placeholder": "Hledat",
+    "no_results": "Nic nenalezeno"
+  },
+  "404": {
+    "title": "Nenalezeno",
+    "cta": "Zpět do shopu"
+  },
+  "customer": {
+    "account": "Účet",
+    "login": "Přihlásit",
+    "register": "Vytvořit účet",
+    "logout": "Odhlásit",
+    "email": "E-mail",
+    "password": "Heslo",
+    "submit": "Pokračovat"
+  }
+}

@@ -1,0 +1,166 @@
+{%- liquid
+  assign stage_collection = section.settings.collection
+  if request.page_type == 'collection'
+    assign stage_collection = collection
+  elsif stage_collection == blank
+    assign stage_collection = collections.all
+  endif
+  assign initial_handle = ''
+  assign open_detail = false
+  if request.page_type == 'product'
+    assign initial_handle = product.handle
+    assign open_detail = true
+  endif
+-%}
+
+<main id="Main" class="stage">
+  <header class="chrome chrome--top">
+    {% render 'logo' %}
+    {% render 'chrome-actions' %}
+  </header>
+
+  <section class="coverflow" aria-label="{{ shop.name }}">
+    <div class="coverflow__track" data-track>
+      {% if stage_collection.products_count == 0 %}
+        <p class="empty">{{ 'cart.empty' | t }}</p>
+      {% endif %}
+      {% for item in stage_collection.products %}
+        <button
+          type="button"
+          class="cover-item{% if forloop.first %} is-current{% endif %}"
+          data-item
+          data-handle="{{ item.handle }}"
+          style="--x: calc({{ forloop.index0 }} * (var(--item) + var(--item-gap)))"
+          aria-label="{{ 'general.accessibility.open_product' | t: title: item.title }}"
+        >
+          {% if item.featured_image %}
+            <img
+              src="{{ item.featured_image | image_url: width: 1400 }}"
+              alt="{{ item.featured_image.alt | default: item.title | escape }}"
+              width="700"
+              height="700"
+              {% if forloop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %}
+            >
+          {% endif %}
+          {% unless item.available %}
+            <span class="sold-pill">{{ 'product.sold_out' | t }}</span>
+          {% endunless %}
+        </button>
+      {% endfor %}
+    </div>
+  </section>
+
+  <h2 class="product-title" data-product-title></h2>
+
+  <div class="detail-bar" data-detail>
+    <div class="detail-row">
+      <div class="field">
+        <label for="StageSize">{{ 'product.size' | t }}</label>
+        <select id="StageSize" data-size></select>
+      </div>
+      <div class="price" data-price></div>
+    </div>
+    <div class="detail-row">
+      <button type="button" class="more-btn" data-more>{{ 'product.more' | t }}</button>
+      <button type="button" class="atc" data-atc>{{ 'product.add' | t }}</button>
+    </div>
+    <div class="product-copy" data-copy></div>
+  </div>
+</main>
+
+{% render 'info-overlay' %}
+
+<div class="wheel-dock">
+  {% render 'ipod-menu' %}
+  <div class="wheel-wrap">
+    {% render 'click-wheel' %}
+  </div>
+</div>
+
+{% render 'cart-overlay' %}
+
+{% render 'legals-overlay' %}
+
+<script type="application/json" id="StageData">
+  {
+    "preview": false,
+    "shopUrl": {{ routes.root_url | json }},
+    "initialHandle": {{ initial_handle | json }},
+    "openDetail": {{ open_detail | json }},
+    "i18n": {
+      "add": {{ 'product.add' | t | json }},
+      "sold_out": {{ 'product.sold_out' | t | json }},
+      "more": {{ 'product.more' | t | json }},
+      "less": {{ 'product.less' | t | json }},
+      "remove": {{ 'cart.remove' | t | json }},
+      "quantity": {{ 'cart.quantity' | t | json }},
+      "qty_up": {{ 'cart.qty_up' | t | json }},
+      "qty_down": {{ 'cart.qty_down' | t | json }},
+      "preview_checkout": {{ 'cart.preview_checkout' | t | json }}
+    },
+    "products": [
+      {% for item in stage_collection.products %}
+        {
+          "id": {{ item.id }},
+          "handle": {{ item.handle | json }},
+          "title": {{ item.title | json }},
+          "url": {{ item.url | json }},
+          "available": {{ item.available }},
+          "price_formatted": {{ item.price | money | strip_html | json }},
+          "description": {{ item.description | strip_html | json }},
+          "description_html": {{ item.description | json }},
+          "images": [
+            {% for image in item.images %}
+              {{ image | image_url: width: 1400 | json }}{% unless forloop.last %},{% endunless %}
+            {% endfor %}
+          ],
+          "variants": [
+            {% for variant in item.variants %}
+              {
+                "id": {{ variant.id }},
+                "title": {{ variant.title | json }},
+                "available": {{ variant.available }},
+                "price_formatted": {{ variant.price | money | strip_html | json }}
+              }{% unless forloop.last %},{% endunless %}
+            {% endfor %}
+          ]
+        }{% unless forloop.last %},{% endunless %}
+      {% endfor %}
+    ]
+  }
+</script>
+
+{% if request.page_type == 'product' %}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": {{ product.title | json }},
+      "url": {{ canonical_url | json }},
+      "image": {{ product.featured_image | image_url: width: 1200 | json }},
+      "description": {{ product.description | strip_html | json }},
+      "brand": { "@type": "Brand", "name": {{ shop.name | json }} },
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": {{ cart.currency.iso_code | json }},
+        "price": {{ product.price | money_without_currency | json }},
+        "availability": "https://schema.org/{% if product.available %}InStock{% else %}OutOfStock{% endif %}"
+      }
+    }
+  </script>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Stage",
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection",
+      "info": "Leave empty to use all products."
+    }
+  ],
+  "presets": [{ "name": "Stage" }]
+}
+{% endschema %}

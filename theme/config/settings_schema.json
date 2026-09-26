@@ -1,0 +1,32 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "LAFLARE Stage",
+    "theme_version": "1.0.0",
+    "theme_author": "LAFLARECLUB",
+    "theme_documentation_url": "https://laflareclub.com",
+    "theme_support_url": "mailto:info@laflareclub.com"
+  },
+  {
+    "name": "Brand",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logo image"
+      },
+      {
+        "type": "text",
+        "id": "logo_text",
+        "label": "Logo text",
+        "default": "LAFLARECLUB"
+      },
+      {
+        "type": "text",
+        "id": "instagram",
+        "label": "Instagram URL",
+        "default": "https://www.instagram.com/laflarecom"
+      }
+    ]
+  }
+]

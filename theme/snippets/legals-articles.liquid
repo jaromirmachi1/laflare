@@ -1,0 +1,71 @@
+{%- liquid
+  assign terms = shop.terms_of_service
+  assign privacy = shop.privacy_policy
+  assign shipping = shop.shipping_policy
+  assign refund = shop.refund_policy
+  assign cookies_page = pages['cookies']
+-%}
+{% if terms != blank and terms.body != blank %}
+  <article class="legals-doc" data-legals-article="terms" hidden>
+    <h1>
+      {%- if terms.title != blank -%}
+        {{ terms.title }}
+      {%- else -%}
+        {{ 'legals.terms' | t }}
+      {%- endif -%}
+    </h1>
+    <div class="rte">{{ terms.body }}</div>
+  </article>
+{% endif %}
+
+{% if privacy != blank and privacy.body != blank %}
+  <article class="legals-doc" data-legals-article="privacy" hidden>
+    <h1>
+      {%- if privacy.title != blank -%}
+        {{ privacy.title }}
+      {%- else -%}
+        {{ 'legals.privacy' | t }}
+      {%- endif -%}
+    </h1>
+    <div class="rte">{{ privacy.body }}</div>
+  </article>
+{% endif %}
+
+{% if shipping != blank and shipping.body != blank %}
+  <article class="legals-doc" data-legals-article="shipping" hidden>
+    <h1>
+      {%- if shipping.title != blank -%}
+        {{ shipping.title }}
+      {%- else -%}
+        {{ 'legals.shipping' | t }}
+      {%- endif -%}
+    </h1>
+    <div class="rte">{{ shipping.body }}</div>
+  </article>
+{% endif %}
+
+{% if refund != blank and refund.body != blank %}
+  <article class="legals-doc" data-legals-article="refund" hidden>
+    <h1>
+      {%- if refund.title != blank -%}
+        {{ refund.title }}
+      {%- else -%}
+        {{ 'legals.returns' | t }}
+      {%- endif -%}
+    </h1>
+    <div class="rte">{{ refund.body }}</div>
+  </article>
+{% endif %}
+
+{% if cookies_page != blank and cookies_page.content != blank %}
+  <article class="legals-doc" data-legals-article="cookies" hidden>
+    <h1>
+      {%- if cookies_page.title != blank -%}
+        {{ cookies_page.title }}
+      {%- else -%}
+        {{ 'legals.cookies' | t }}
+      {%- endif -%}
+    </h1>
+    <div class="rte">{{ cookies_page.content }}</div>
+  </article>
+{% endif %}

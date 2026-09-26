@@ -1,0 +1,21 @@
+<main id="Main" class="page-shell">
+  <header class="chrome chrome--top">
+    {% render 'logo' %}
+    {% render 'chrome-actions' %}
+  </header>
+  <h1>{{ 'customer.login' | t }}</h1>
+  <div class="form-stack">
+    {% form 'customer_login' %}
+      {{ form.errors | default_errors }}
+      <label for="CustomerEmail">{{ 'customer.email' | t }}</label>
+      <input id="CustomerEmail" type="email" name="customer[email]" autocomplete="email" required>
+      <label for="CustomerPassword">{{ 'customer.password' | t }}</label>
+      <input id="CustomerPassword" type="password" name="customer[password]" autocomplete="current-password" required>
+      <button class="atc" type="submit">{{ 'customer.submit' | t }}</button>
+    {% endform %}
+    <a href="{{ routes.account_register_url }}">{{ 'customer.register' | t }}</a>
+  </div>
+</main>
+{% schema %}
+{ "name": "Login", "settings": [] }
+{% endschema %}

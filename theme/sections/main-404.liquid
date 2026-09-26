@@ -1,0 +1,11 @@
+<main id="Main" class="page-shell">
+  <header class="chrome chrome--top">
+    {% render 'logo' %}
+    {% render 'chrome-actions' %}
+  </header>
+  <h1>{{ '404.title' | t }}</h1>
+  <p><a class="atc" href="{{ routes.root_url }}">{{ '404.cta' | t }}</a></p>
+</main>
+{% schema %}
+{ "name": "404", "settings": [] }
+{% endschema %}

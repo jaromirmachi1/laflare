@@ -1,0 +1,44 @@
+<main id="Main" class="page-shell">
+  <header class="chrome chrome--top">
+    {% render 'logo' %}
+    {% render 'chrome-actions' %}
+  </header>
+  {% if page.handle contains 'about' %}
+    <h1>{{ page.title }}</h1>
+    {% render 'about-contact' %}
+    {% if page.content != blank %}
+      <div class="rte about-contact__extra">{{ page.content }}</div>
+    {% endif %}
+  {% elsif page.handle contains 'legal' %}
+    <div data-legals-page>
+      <div data-legals-hub>
+        <h1>{{ page.title }}</h1>
+        {% render 'legals-hub' %}
+      </div>
+      <button type="button" class="legals-back" data-legals-back hidden>
+        {{ 'legals.back' | t }}
+      </button>
+      {% render 'legals-articles' %}
+    </div>
+  {% else %}
+    <h1>{{ page.title }}</h1>
+    <div class="rte">{{ page.content }}</div>
+  {% endif %}
+</main>
+<div class="wheel-dock">
+  {% render 'ipod-menu' %}
+  <div class="wheel-wrap">
+    {% render 'click-wheel' %}
+  </div>
+</div>
+{% render 'cart-overlay' %}
+{% render 'legals-overlay' %}
+<script type="application/json" id="StageData">
+  { "preview": false, "products": [], "i18n": {} }
+</script>
+{% schema %}
+{
+  "name": "Page",
+  "settings": []
+}
+{% endschema %}

@@ -1,0 +1,15 @@
+<div class="overlay overlay--cart" data-cart aria-hidden="true">
+  <aside class="cart-panel" role="dialog" aria-modal="true" aria-labelledby="CartTitle">
+    <div class="cart-panel__head">
+      <h1 id="CartTitle">{{ 'cart.title' | t }}</h1>
+      <button type="button" class="icon-btn" data-close-cart>{{ 'general.accessibility.close' | t }}</button>
+    </div>
+    <div class="cart-panel__body">
+      <p class="cart-empty" data-cart-empty>{{ 'cart.empty' | t }}</p>
+      <div class="cart-lines" data-cart-lines></div>
+    </div>
+    <div class="cart-panel__foot">
+      <button type="button" class="atc" data-checkout>{{ 'cart.checkout' | t }}</button>
+    </div>
+  </aside>
+</div>

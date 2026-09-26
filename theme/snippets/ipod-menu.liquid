@@ -1,0 +1,32 @@
+{%- liquid
+  assign menu_shop = routes.root_url
+  assign about_page = pages['about-us']
+  if about_page == blank
+    assign about_page = pages.about
+  endif
+  if about_page == blank
+    assign about_page = pages['about']
+  endif
+  assign menu_about = about_page.url | default: routes.root_url
+-%}
+<nav class="ipod-menu" data-menu aria-hidden="true" aria-label="{{ 'general.accessibility.menu' | t }}">
+  <a
+    class="ipod-menu__item{% if request.page_type == 'index' %} is-active{% endif %}"
+    href="{{ menu_shop }}"
+    data-menu-item
+    {% if request.page_type == 'index' %}aria-current="page"{% endif %}
+  >Shop</a>
+  <a
+    class="ipod-menu__item{% if request.path contains '/pages/about' %} is-active{% endif %}"
+    href="{{ menu_about }}"
+    data-menu-item
+    {% if request.path contains '/pages/about' %}aria-current="page"{% endif %}
+  >{{ 'general.accessibility.about' | t }}</a>
+  <button type="button" class="ipod-menu__item ipod-menu__item--cart" data-menu-item data-open-cart>
+    {{ 'general.accessibility.cart' | t }}
+    <span data-cart-count>{{ cart.item_count }}</span>
+  </button>
+  <button type="button" class="ipod-menu__item" data-menu-item data-open-legals>
+    {{ 'general.accessibility.legals' | t }}
+  </button>
+</nav>

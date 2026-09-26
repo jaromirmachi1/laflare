@@ -1,0 +1,89 @@
+{
+  "general": {
+    "meta": {
+      "title": "LAFLARECLUB",
+      "description": "Luxury streetwear from music culture. Limited drops, organic cotton, made for the scene."
+    },
+    "accessibility": {
+      "skip": "Skip to content",
+      "menu": "Menu",
+      "back": "Back",
+      "close": "Close",
+      "previous": "Previous",
+      "next": "Next",
+      "down": "Next item",
+      "select": "Select",
+      "cart": "Cart",
+      "about": "About",
+      "legals": "Legals",
+      "account_cart": "Account and cart",
+      "open_product": "Open {{ title }}"
+    }
+  },
+  "about": {
+    "contact_label": "About & contact",
+    "lead": "LAFLARECLUB is luxury streetwear from music culture. The brand is owned and operated by Jaromír Machalíček as a sole trader in the Czech Republic.",
+    "owner_heading": "Owner",
+    "owner": "Owner",
+    "contact_heading": "Contact",
+    "ico": "IČO",
+    "form": "Legal form",
+    "form_value": "Natural person trading under the Trade Licensing Act (OSVČ)",
+    "since": "Registered",
+    "address": "Business address",
+    "country": "Czech Republic",
+    "email": "Email",
+    "registry": "Public business register"
+  },
+  "legals": {
+    "label": "Legal documents",
+    "lead": "All required legal information for shopping at LAFLARECLUB.",
+    "terms": "Terms & conditions",
+    "terms_note": "Purchase terms and customer obligations",
+    "privacy": "Privacy policy",
+    "privacy_note": "How we process personal data (GDPR)",
+    "shipping": "Shipping & payment",
+    "shipping_note": "Delivery options, timing, and payment methods",
+    "returns": "Returns & complaints",
+    "returns_note": "Withdrawal rights, exchanges, and claims",
+    "cookies": "Cookie policy",
+    "cookies_note": "How this site uses cookies",
+    "back": "← Legals",
+    "empty": "Add your legal texts in Shopify Admin → Settings → Policies. Optional cookies page handle: cookies."
+  },
+  "product": {
+    "size": "Size",
+    "add": "Add to cart",
+    "sold_out": "Sold out",
+    "more": "More info",
+    "less": "Less info",
+    "unavailable": "Unavailable"
+  },
+  "cart": {
+    "title": "Cart",
+    "empty": "Your cart is empty",
+    "checkout": "Checkout",
+    "remove": "Remove",
+    "quantity": "Quantity",
+    "qty_up": "Increase quantity",
+    "qty_down": "Decrease quantity",
+    "preview_checkout": "Preview only. Upload this theme to Shopify to checkout."
+  },
+  "search": {
+    "placeholder": "Search",
+    "no_results": "No results"
+  },
+  "404": {
+    "title": "Not found",
+    "cta": "Back to shop"
+  },
+  "customer": {
+    "account": "Account",
+    "login": "Log in",
+    "register": "Create account",
+    "logout": "Log out",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Continue"
+  }
+}

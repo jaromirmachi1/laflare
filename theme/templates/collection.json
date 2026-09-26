@@ -1,0 +1,9 @@
+{
+  "sections": {
+    "stage": {
+      "type": "stage",
+      "settings": {}
+    }
+  },
+  "order": ["stage"]
+}

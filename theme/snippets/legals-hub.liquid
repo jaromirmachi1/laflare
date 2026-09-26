@@ -1,0 +1,103 @@
+{%- liquid
+  assign terms = shop.terms_of_service
+  assign privacy = shop.privacy_policy
+  assign shipping = shop.shipping_policy
+  assign refund = shop.refund_policy
+  assign cookies_page = pages['cookies']
+  assign has_links = false
+  if terms != blank and terms.body != blank
+    assign has_links = true
+  endif
+  if privacy != blank and privacy.body != blank
+    assign has_links = true
+  endif
+  if shipping != blank and shipping.body != blank
+    assign has_links = true
+  endif
+  if refund != blank and refund.body != blank
+    assign has_links = true
+  endif
+  if cookies_page != blank and cookies_page.content != blank
+    assign has_links = true
+  endif
+-%}
+<section class="legals-hub" aria-label="{{ 'legals.label' | t }}">
+  <p class="legals-hub__lead">{{ 'legals.lead' | t }}</p>
+
+  {% if has_links %}
+    <ul class="legals-hub__list">
+      {% if terms != blank and terms.body != blank %}
+        <li>
+          <button type="button" class="legals-hub__link" data-legals-open="terms">
+            <span class="legals-hub__title">
+              {%- if terms.title != blank -%}
+                {{ terms.title }}
+              {%- else -%}
+                {{ 'legals.terms' | t }}
+              {%- endif -%}
+            </span>
+            <span class="legals-hub__note">{{ 'legals.terms_note' | t }}</span>
+          </button>
+        </li>
+      {% endif %}
+      {% if privacy != blank and privacy.body != blank %}
+        <li>
+          <button type="button" class="legals-hub__link" data-legals-open="privacy">
+            <span class="legals-hub__title">
+              {%- if privacy.title != blank -%}
+                {{ privacy.title }}
+              {%- else -%}
+                {{ 'legals.privacy' | t }}
+              {%- endif -%}
+            </span>
+            <span class="legals-hub__note">{{ 'legals.privacy_note' | t }}</span>
+          </button>
+        </li>
+      {% endif %}
+      {% if shipping != blank and shipping.body != blank %}
+        <li>
+          <button type="button" class="legals-hub__link" data-legals-open="shipping">
+            <span class="legals-hub__title">
+              {%- if shipping.title != blank -%}
+                {{ shipping.title }}
+              {%- else -%}
+                {{ 'legals.shipping' | t }}
+              {%- endif -%}
+            </span>
+            <span class="legals-hub__note">{{ 'legals.shipping_note' | t }}</span>
+          </button>
+        </li>
+      {% endif %}
+      {% if refund != blank and refund.body != blank %}
+        <li>
+          <button type="button" class="legals-hub__link" data-legals-open="refund">
+            <span class="legals-hub__title">
+              {%- if refund.title != blank -%}
+                {{ refund.title }}
+              {%- else -%}
+                {{ 'legals.returns' | t }}
+              {%- endif -%}
+            </span>
+            <span class="legals-hub__note">{{ 'legals.returns_note' | t }}</span>
+          </button>
+        </li>
+      {% endif %}
+      {% if cookies_page != blank and cookies_page.content != blank %}
+        <li>
+          <button type="button" class="legals-hub__link" data-legals-open="cookies">
+            <span class="legals-hub__title">
+              {%- if cookies_page.title != blank -%}
+                {{ cookies_page.title }}
+              {%- else -%}
+                {{ 'legals.cookies' | t }}
+              {%- endif -%}
+            </span>
+            <span class="legals-hub__note">{{ 'legals.cookies_note' | t }}</span>
+          </button>
+        </li>
+      {% endif %}
+    </ul>
+  {% else %}
+    <p class="legals-hub__empty">{{ 'legals.empty' | t }}</p>
+  {% endif %}
+</section>

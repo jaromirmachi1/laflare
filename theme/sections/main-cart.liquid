@@ -1,0 +1,26 @@
+<main id="Main" class="page-shell">
+  <header class="chrome chrome--top">
+    {% render 'logo' %}
+    {% render 'chrome-actions' %}
+  </header>
+  <h1>{{ 'cart.title' | t }}</h1>
+  {% if cart.item_count == 0 %}
+    <p>{{ 'cart.empty' | t }}</p>
+  {% else %}
+    <div class="cart-lines">
+      {% for item in cart.items %}
+        <div class="cart-line">
+          <img src="{{ item.image | image_url: width: 200 }}" alt="{{ item.title | escape }}">
+          <div>
+            <p>{{ item.product.title }}</p>
+            <span>{{ item.quantity }} · {{ item.final_line_price | money }}</span>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <a class="atc" href="/checkout">{{ 'cart.checkout' | t }}</a>
+  {% endif %}
+</main>
+{% schema %}
+{ "name": "Cart", "settings": [] }
+{% endschema %}

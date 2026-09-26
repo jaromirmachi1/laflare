@@ -1,0 +1,623 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Shop · LAFLARECLUB</title>
+    <meta
+      name="description"
+      content="Luxury streetwear from music culture. Limited drops, organic cotton, made for the scene."
+    />
+    <link rel="canonical" href="https://laflareclub.com/" />
+    <style>
+      @font-face {
+        font-family: "Vastine";
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        src: url("../theme/assets/vastine-regular.woff2") format("woff2");
+      }
+      @font-face {
+        font-family: "Vastine";
+        font-style: normal;
+        font-weight: 500;
+        font-display: swap;
+        src: url("../theme/assets/vastine-medium.woff2") format("woff2");
+      }
+      @font-face {
+        font-family: "Vastine";
+        font-style: normal;
+        font-weight: 600;
+        font-display: swap;
+        src: url("../theme/assets/vastine-semibold.woff2") format("woff2");
+      }
+      @font-face {
+        font-family: "Vastine";
+        font-style: normal;
+        font-weight: 700;
+        font-display: swap;
+        src: url("../theme/assets/vastine-bold.woff2") format("woff2");
+      }
+      :root {
+        /* resolved from shop.css location (theme/assets/) */
+        --cursor: url("cursor.svg") 4 2, auto;
+        --cursor-hover: url("cursor.svg") 4 2, auto;
+      }
+    </style>
+    <link rel="stylesheet" href="../theme/assets/shop.css?v=cursor-hover" />
+  </head>
+  <body class="template-index" data-preview="true">
+    <a class="skip-link" href="#Main">Skip to content</a>
+    <main id="Main" class="stage">
+      <header class="chrome chrome--top">
+        <a class="logo logo--wordmark" href="./index.html" aria-label="LAFLARECLUB">
+          <img
+            class="logo__mark"
+            src="../theme/assets/logo.png?v=wordmark"
+            alt="LAFLARECLUB"
+            width="1024"
+            height="237"
+          />
+        </a>
+      
+        <nav class="chrome-actions" aria-label="Account and cart">
+          <a
+            class="chrome-icon chrome-icon--account"
+            href="./index.html"
+            aria-label="Account"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path
+                fill="currentColor"
+                d="M12 2.8c2.2 0 4 1.8 4 4s-1.8 4-4 4-4-1.8-4-4 1.8-4 4-4Zm0 9.2c4.7 0 8.5 2.6 8.5 7.1 0 .7-.5 1.2-1.2 1.2H4.7c-.7 0-1.2-.5-1.2-1.2 0-4.5 3.8-7.1 8.5-7.1Z"
+              />
+            </svg>
+          </a>
+          <button
+            type="button"
+            class="chrome-icon chrome-icon--cart"
+            data-open-cart
+            aria-label="Cart"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path
+                fill="currentColor"
+                d="M8.2 3.2h7.6c.5 0 .9.4.9.9v2.1h2.1c.4 0 .7.4.6.8l-1.5 11.2c-.1.9-.9 1.6-1.8 1.6H7.9c-.9 0-1.7-.7-1.8-1.6L4.6 7c-.1-.4.2-.8.6-.8h2.1V4.1c0-.5.4-.9.9-.9Zm1.4 3h4.8V5.1H9.6v1.1Zm-2.5 2.4.2 1.4h9.4l.2-1.4H7.1Zm.4 3.2.9 6.6h7.2l.9-6.6H7.5Z"
+              />
+            </svg>
+            <span class="chrome-icon__count" data-cart-count hidden>0</span>
+          </button>
+        </nav>
+</header>
+      <section class="coverflow" aria-label="LAFLARECLUB">
+        <div class="coverflow__track" data-track>
+          <button
+            type="button"
+            class="cover-item is-current"
+            data-item
+            data-handle="beyond-ones-limits-tee"
+            style="--x: 0px"
+            aria-label="Open BEYOND ONES LIMITS TEE"
+          >
+            <img
+              src="https://cdn.shopify.com/s/files/1/0555/8806/1508/files/BLACKFRONT1_1.png?v=1731066007"
+              alt="BEYOND ONES LIMITS TEE"
+              width="700"
+              height="700"
+              fetchpriority="high"
+            />
+          </button>
+          <button
+            type="button"
+            class="cover-item"
+            data-item
+            data-handle="cedric-pospes-si-triko"
+            style="--x: calc(1 * (var(--item) + var(--item-gap)))"
+            aria-label="Open CÉDRIC POSPĚŠ SI TEE"
+          >
+            <img
+              src="https://cdn.shopify.com/s/files/1/0555/8806/1508/files/triko3.png?v=1776505116"
+              alt="CÉDRIC POSPĚŠ SI TEE"
+              width="700"
+              height="700"
+              loading="lazy"
+            />
+            <span class="sold-pill">Sold out</span>
+          </button>
+          <button
+            type="button"
+            class="cover-item"
+            data-item
+            data-handle="good-friends-to-do-good-tee"
+            style="--x: calc(2 * (var(--item) + var(--item-gap)))"
+            aria-label="Open GOOD FRIENDS TO DO GOOD TEE"
+          >
+            <img
+              src="https://cdn.shopify.com/s/files/1/0555/8806/1508/files/frontcream_final.png?v=1731065352"
+              alt="GOOD FRIENDS TO DO GOOD TEE"
+              width="700"
+              height="700"
+              loading="lazy"
+            />
+          </button>
+          <button
+            type="button"
+            class="cover-item"
+            data-item
+            data-handle="third-eye-hoodie"
+            style="--x: calc(3 * (var(--item) + var(--item-gap)))"
+            aria-label="Open THIRD EYE HOODIE"
+          >
+            <img
+              src="https://cdn.shopify.com/s/files/1/0555/8806/1508/files/HOODIEFRONT1_2.png?v=1731066103"
+              alt="THIRD EYE HOODIE"
+              width="700"
+              height="700"
+              loading="lazy"
+            />
+          </button>
+        </div>
+      </section>
+      <h2 class="product-title" data-product-title></h2>
+      <div class="detail-bar" data-detail>
+        <div class="detail-row">
+          <div class="field">
+            <label for="StageSize">Size</label>
+            <select id="StageSize" data-size></select>
+          </div>
+          <div class="price" data-price></div>
+        </div>
+        <div class="detail-row">
+          <button type="button" class="more-btn" data-more>More info</button>
+          <button type="button" class="atc" data-atc>Add to cart</button>
+        </div>
+        <div class="product-copy" data-copy></div>
+      </div>
+    </main>
+
+    <div class="overlay overlay--info" data-info aria-hidden="true">
+      <div class="info-panel" role="dialog" aria-modal="true" aria-labelledby="InfoTitle">
+        <h1 id="InfoTitle" data-info-title></h1>
+        <div class="info-panel__copy" data-info-copy></div>
+        <button type="button" class="icon-btn" data-close-info>Close</button>
+      </div>
+    </div>
+
+    <div class="wheel-dock">
+      <nav class="ipod-menu" data-menu aria-hidden="true" aria-label="Menu">
+        <a
+          class="ipod-menu__item is-active"
+          href="./index.html"
+          data-menu-item
+          aria-current="page"
+          >Shop</a
+        >
+        <a class="ipod-menu__item" href="./about.html" data-menu-item>About</a>
+        <button
+          type="button"
+          class="ipod-menu__item ipod-menu__item--cart"
+          data-menu-item
+          data-open-cart
+        >
+          Cart <span data-cart-count>0</span>
+        </button>
+        <button
+          type="button"
+          class="ipod-menu__item"
+          data-menu-item
+          data-open-legals
+        >
+          Legals
+        </button>
+      </nav>
+      <div class="wheel-wrap">
+        <div class="wheel" role="group" aria-label="LAFLARECLUB">
+          <span class="wheel__label" aria-hidden="true">
+            <span data-wheel-menu-label>Menu</span>
+            <span data-wheel-back-label hidden>Back</span>
+          </span>
+          <svg
+            class="wheel__skip wheel__skip--prev"
+            viewBox="0 0 22 14"
+            aria-hidden="true"
+          >
+            <rect
+              x="1"
+              y="2"
+              width="2.2"
+              height="10"
+              rx="0.3"
+              fill="currentColor"
+            />
+            <path d="M5 7 L12.5 2.2 L12.5 11.8 Z" fill="currentColor" />
+            <path d="M12.2 7 L19.7 2.2 L19.7 11.8 Z" fill="currentColor" />
+          </svg>
+          <svg
+            class="wheel__skip wheel__skip--next"
+            viewBox="0 0 22 14"
+            aria-hidden="true"
+          >
+            <path d="M2.3 2.2 L9.8 7 L2.3 11.8 Z" fill="currentColor" />
+            <path d="M9.5 2.2 L17 7 L9.5 11.8 Z" fill="currentColor" />
+            <rect
+              x="18.8"
+              y="2"
+              width="2.2"
+              height="10"
+              rx="0.3"
+              fill="currentColor"
+            />
+          </svg>
+          <svg
+            class="wheel__down"
+            viewBox="0 0 14 10"
+            aria-hidden="true"
+          >
+            <path d="M1.2 2.2 L7 8.6 L12.8 2.2 Z" fill="currentColor" />
+          </svg>
+          <button
+            type="button"
+            class="wheel__hit wheel__hit--menu"
+            data-menu-btn
+            data-label-menu="Menu"
+            data-label-back="Back"
+          >
+            Menu
+          </button>
+          <button type="button" class="wheel__hit wheel__hit--prev" data-prev>
+            Previous
+          </button>
+          <button type="button" class="wheel__hit wheel__hit--next" data-next>
+            Next
+          </button>
+          <button type="button" class="wheel__hit wheel__hit--down" data-down>
+            Next item
+          </button>
+          <button type="button" class="wheel__center" data-select>
+            Select
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="overlay overlay--cart" data-cart aria-hidden="true">
+      <aside class="cart-panel" role="dialog" aria-modal="true" aria-labelledby="CartTitle">
+        <div class="cart-panel__head">
+          <h1 id="CartTitle">Cart</h1>
+          <button type="button" class="icon-btn" data-close-cart>Close</button>
+        </div>
+        <div class="cart-panel__body">
+          <p class="cart-empty" data-cart-empty>Your cart is empty</p>
+          <div class="cart-lines" data-cart-lines></div>
+        </div>
+        <div class="cart-panel__foot">
+          <button type="button" class="atc" data-checkout>Checkout</button>
+        </div>
+      </aside>
+    </div>
+
+    <div class="overlay overlay--legals" data-legals aria-hidden="true">
+      <div class="legals-panel">
+        <header class="chrome chrome--top">
+          <a class="logo logo--wordmark" href="./index.html" aria-label="LAFLARECLUB">
+            <img
+              class="logo__mark"
+              src="../theme/assets/logo.png?v=wordmark"
+              alt="LAFLARECLUB"
+              width="1024"
+              height="237"
+            />
+          </a>
+        </header>
+
+        <div data-legals-hub>
+          <h1>Legals</h1>
+          <section class="legals-hub" aria-label="Legal documents">
+            <p class="legals-hub__lead">
+              All required legal information for shopping at LAFLARECLUB.
+            </p>
+            <ul class="legals-hub__list">
+              <li>
+                <button
+                  type="button"
+                  class="legals-hub__link"
+                  data-legals-open="terms"
+                >
+                  <span class="legals-hub__title">Terms & conditions</span>
+                  <span class="legals-hub__note"
+                    >Purchase terms and customer obligations</span
+                  >
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  class="legals-hub__link"
+                  data-legals-open="privacy"
+                >
+                  <span class="legals-hub__title">Privacy policy</span>
+                  <span class="legals-hub__note"
+                    >How we process personal data (GDPR)</span
+                  >
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  class="legals-hub__link"
+                  data-legals-open="shipping"
+                >
+                  <span class="legals-hub__title">Shipping & payment</span>
+                  <span class="legals-hub__note"
+                    >Delivery options, timing, and payment methods</span
+                  >
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  class="legals-hub__link"
+                  data-legals-open="refund"
+                >
+                  <span class="legals-hub__title">Returns & complaints</span>
+                  <span class="legals-hub__note"
+                    >Withdrawal rights, exchanges, and claims</span
+                  >
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  class="legals-hub__link"
+                  data-legals-open="cookies"
+                >
+                  <span class="legals-hub__title">Cookie policy</span>
+                  <span class="legals-hub__note"
+                    >How this site uses cookies</span
+                  >
+                </button>
+              </li>
+            </ul>
+          </section>
+        </div>
+
+        <button type="button" class="legals-back" data-legals-back hidden>
+          ← Legals
+        </button>
+
+        <article class="legals-doc" data-legals-article="terms" hidden>
+          <h1>Terms & conditions</h1>
+          <div class="rte">
+            <p>
+              These are the purchase terms for LAFLARECLUB. Replace with the
+              final Czech/English legal text from Shopify Policies.
+            </p>
+            <p>
+              Orders are binding after payment confirmation. Delivery times,
+              sizing, and returns follow the published shipping and refund
+              policies.
+            </p>
+            <p>
+              Scroll with the iPod wheel (prev / next / down) to move through
+              longer legal documents without leaving the stage.
+            </p>
+          </div>
+        </article>
+        <article class="legals-doc" data-legals-article="privacy" hidden>
+          <h1>Privacy policy</h1>
+          <div class="rte">
+            <p>
+              We process personal data needed to fulfill orders, customer
+              support, and legal obligations (GDPR).
+            </p>
+            <p>
+              Contact: info@laflareclub.com. Full policy text lives in Shopify
+              Admin → Settings → Policies.
+            </p>
+          </div>
+        </article>
+        <article class="legals-doc" data-legals-article="shipping" hidden>
+          <h1>Shipping & payment</h1>
+          <div class="rte">
+            <p>
+              Delivery options, carriers, timing, and payment methods for
+              LAFLARECLUB orders.
+            </p>
+          </div>
+        </article>
+        <article class="legals-doc" data-legals-article="refund" hidden>
+          <h1>Returns & complaints</h1>
+          <div class="rte">
+            <p>
+              Withdrawal rights, exchanges, and complaint handling under Czech
+              consumer law.
+            </p>
+          </div>
+        </article>
+        <article class="legals-doc" data-legals-article="cookies" hidden>
+          <h1>Cookie policy</h1>
+          <div class="rte">
+            <p>How this site uses cookies and similar technologies.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <script type="application/json" id="StageData">
+      {
+        "preview": true,
+        "shopUrl": "./index.html",
+        "initialHandle": "beyond-ones-limits-tee",
+        "openDetail": false,
+        "i18n": {
+          "add": "Add to cart",
+          "sold_out": "Sold out",
+          "more": "More info",
+          "less": "Less info",
+          "remove": "Remove",
+          "quantity": "Quantity",
+          "qty_up": "Increase quantity",
+          "qty_down": "Decrease quantity",
+          "preview_checkout": "Preview only. Upload this theme to Shopify to checkout."
+        },
+        "products": [
+          {
+            "id": 8219172176196,
+            "handle": "beyond-ones-limits-tee",
+            "title": "BEYOND ONES LIMITS TEE",
+            "url": "./index.html",
+            "available": true,
+            "price_formatted": "1.290 Kč",
+            "description": "Oversized heavyweight 260gsm organic cotton tee. Screen print front and back, distressed details, ribbed crew neck.",
+            "images": [
+              "https://cdn.shopify.com/s/files/1/0555/8806/1508/files/BLACKFRONT1_1.png?v=1731066007",
+              "https://cdn.shopify.com/s/files/1/0555/8806/1508/files/BLACKBACK1_1.png?v=1731066003"
+            ],
+            "variants": [
+              {
+                "id": 46376040497476,
+                "title": "S",
+                "available": true,
+                "price_formatted": "1.290 Kč"
+              },
+              {
+                "id": 46376040530244,
+                "title": "M",
+                "available": true,
+                "price_formatted": "1.290 Kč"
+              },
+              {
+                "id": 46376040563012,
+                "title": "L",
+                "available": true,
+                "price_formatted": "1.290 Kč"
+              },
+              {
+                "id": 46376040595780,
+                "title": "XL",
+                "available": true,
+                "price_formatted": "1.290 Kč"
+              }
+            ]
+          },
+          {
+            "id": 15532965691716,
+            "handle": "cedric-pospes-si-triko",
+            "title": "CÉDRIC POSPĚŠ SI TEE",
+            "url": "./index.html",
+            "available": false,
+            "price_formatted": "649 Kč",
+            "description": "33 numbered tees. DTF heading, hand-sprayed number by Cédric. Closed series, no restocks.",
+            "images": [
+              "https://cdn.shopify.com/s/files/1/0555/8806/1508/files/triko3.png?v=1776505116"
+            ],
+            "variants": [
+              {
+                "id": 56679027179844,
+                "title": "S",
+                "available": false,
+                "price_formatted": "649 Kč"
+              },
+              {
+                "id": 56679027212612,
+                "title": "M",
+                "available": false,
+                "price_formatted": "649 Kč"
+              },
+              {
+                "id": 56679027245380,
+                "title": "L",
+                "available": false,
+                "price_formatted": "649 Kč"
+              },
+              {
+                "id": 56679027278148,
+                "title": "XL",
+                "available": false,
+                "price_formatted": "649 Kč"
+              }
+            ]
+          },
+          {
+            "id": 8340235714884,
+            "handle": "good-friends-to-do-good-tee",
+            "title": "GOOD FRIENDS TO DO GOOD TEE",
+            "url": "./index.html",
+            "available": true,
+            "price_formatted": "1.290 Kč",
+            "description": "Cream oversized 260gsm organic cotton tee. Screen print front and back, distressed design elements.",
+            "images": [
+              "https://cdn.shopify.com/s/files/1/0555/8806/1508/files/frontcream_final.png?v=1731065352",
+              "https://cdn.shopify.com/s/files/1/0555/8806/1508/files/backcream_final_068a437c-cd15-468e-8b42-8bdbe27deb71.png?v=1731065351"
+            ],
+            "variants": [
+              {
+                "id": 46376031977796,
+                "title": "S",
+                "available": true,
+                "price_formatted": "1.290 Kč"
+              },
+              {
+                "id": 46376032010564,
+                "title": "M",
+                "available": true,
+                "price_formatted": "1.290 Kč"
+              },
+              {
+                "id": 46376032043332,
+                "title": "L",
+                "available": true,
+                "price_formatted": "1.290 Kč"
+              },
+              {
+                "id": 46376032076100,
+                "title": "XL",
+                "available": true,
+                "price_formatted": "1.290 Kč"
+              }
+            ]
+          },
+          {
+            "id": 8219149173060,
+            "handle": "third-eye-hoodie",
+            "title": "THIRD EYE HOODIE",
+            "url": "./index.html",
+            "available": true,
+            "price_formatted": "2.290 Kč",
+            "description": "Olive cropped 450gsm French terry hoodie. Corrosive spray, screen print, logo embroidery on the hood.",
+            "images": [
+              "https://cdn.shopify.com/s/files/1/0555/8806/1508/files/HOODIEFRONT1_2.png?v=1731066103"
+            ],
+            "variants": [
+              {
+                "id": 44795502231876,
+                "title": "S",
+                "available": true,
+                "price_formatted": "2.290 Kč"
+              },
+              {
+                "id": 44795502264644,
+                "title": "M",
+                "available": true,
+                "price_formatted": "2.290 Kč"
+              },
+              {
+                "id": 44795502297412,
+                "title": "L",
+                "available": true,
+                "price_formatted": "2.290 Kč"
+              },
+              {
+                "id": 44795502330180,
+                "title": "XL",
+                "available": true,
+                "price_formatted": "2.290 Kč"
+              }
+            ]
+          }
+        ]
+      }
+    </script>
+    <script src="../theme/assets/shop.js?v=chrome-flat" defer></script>
+  </body>
+</html>

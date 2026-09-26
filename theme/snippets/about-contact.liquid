@@ -1,0 +1,64 @@
+<section class="about-contact" aria-label="{{ 'about.contact_label' | t }}">
+  <p class="about-contact__lead">{{ 'about.lead' | t }}</p>
+
+  <h2 class="about-contact__heading">{{ 'about.owner_heading' | t }}</h2>
+  <dl class="about-contact__list">
+    <div class="about-contact__row">
+      <dt>{{ 'about.owner' | t }}</dt>
+      <dd>Jaromír Machalíček</dd>
+    </div>
+    <div class="about-contact__row">
+      <dt>{{ 'about.ico' | t }}</dt>
+      <dd>14293811</dd>
+    </div>
+    <div class="about-contact__row">
+      <dt>{{ 'about.form' | t }}</dt>
+      <dd>{{ 'about.form_value' | t }}</dd>
+    </div>
+    <div class="about-contact__row">
+      <dt>{{ 'about.since' | t }}</dt>
+      <dd>25. 2. 2022</dd>
+    </div>
+    <div class="about-contact__row">
+      <dt>{{ 'about.address' | t }}</dt>
+      <dd>
+        Slatina 198<br>
+        742 93 Slatina<br>
+        {{ 'about.country' | t }}
+      </dd>
+    </div>
+  </dl>
+
+  <h2 class="about-contact__heading">{{ 'about.contact_heading' | t }}</h2>
+  <dl class="about-contact__list">
+    <div class="about-contact__row">
+      <dt>{{ 'about.email' | t }}</dt>
+      <dd><a href="mailto:info@laflareclub.com">info@laflareclub.com</a></dd>
+    </div>
+    <div class="about-contact__row">
+      <dt>WhatsApp</dt>
+      <dd>
+        <a href="https://wa.me/420775381470">+420 775 381 470</a><br>
+        <a href="https://wa.me/420702046778">+420 702 046 778</a>
+      </dd>
+    </div>
+    <div class="about-contact__row">
+      <dt>Instagram</dt>
+      <dd>
+        <a
+          href="{{ settings.instagram | default: 'https://www.instagram.com/laflarecom' }}"
+          rel="noopener"
+          target="_blank"
+        >@laflarecom</a>
+      </dd>
+    </div>
+  </dl>
+
+  <p class="about-contact__source">
+    <a
+      href="https://www.podnikatel.cz/rejstrik/jaromir-machalicek-14293811/"
+      rel="noopener"
+      target="_blank"
+    >{{ 'about.registry' | t }}</a>
+  </p>
+</section>

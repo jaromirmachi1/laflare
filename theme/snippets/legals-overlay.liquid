@@ -1,0 +1,18 @@
+<div class="overlay overlay--legals" data-legals aria-hidden="true">
+  <div class="legals-panel">
+    <header class="chrome chrome--top">
+      {% render 'logo' %}
+    </header>
+
+    <div data-legals-hub>
+      <h1>{{ 'general.accessibility.legals' | t }}</h1>
+      {% render 'legals-hub' %}
+    </div>
+
+    <button type="button" class="legals-back" data-legals-back hidden>
+      {{ 'legals.back' | t }}
+    </button>
+
+    {% render 'legals-articles' %}
+  </div>
+</div>

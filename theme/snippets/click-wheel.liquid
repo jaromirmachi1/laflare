@@ -1,0 +1,30 @@
+<div class="wheel" role="group" aria-label="{{ shop.name }}">
+  <span class="wheel__label" aria-hidden="true">
+    <span data-wheel-menu-label>{{ 'general.accessibility.menu' | t }}</span>
+    <span data-wheel-back-label hidden>{{ 'general.accessibility.back' | t }}</span>
+  </span>
+  <svg class="wheel__skip wheel__skip--prev" viewBox="0 0 22 14" aria-hidden="true">
+    <rect x="1" y="2" width="2.2" height="10" rx="0.3" fill="currentColor"/>
+    <path d="M5 7 L12.5 2.2 L12.5 11.8 Z" fill="currentColor"/>
+    <path d="M12.2 7 L19.7 2.2 L19.7 11.8 Z" fill="currentColor"/>
+  </svg>
+  <svg class="wheel__skip wheel__skip--next" viewBox="0 0 22 14" aria-hidden="true">
+    <path d="M2.3 2.2 L9.8 7 L2.3 11.8 Z" fill="currentColor"/>
+    <path d="M9.5 2.2 L17 7 L9.5 11.8 Z" fill="currentColor"/>
+    <rect x="18.8" y="2" width="2.2" height="10" rx="0.3" fill="currentColor"/>
+  </svg>
+  <svg class="wheel__down" viewBox="0 0 14 10" aria-hidden="true">
+    <path d="M1.2 2.2 L7 8.6 L12.8 2.2 Z" fill="currentColor"/>
+  </svg>
+  <button
+    type="button"
+    class="wheel__hit wheel__hit--menu"
+    data-menu-btn
+    data-label-menu="{{ 'general.accessibility.menu' | t }}"
+    data-label-back="{{ 'general.accessibility.back' | t }}"
+  >{{ 'general.accessibility.menu' | t }}</button>
+  <button type="button" class="wheel__hit wheel__hit--prev" data-prev>{{ 'general.accessibility.previous' | t }}</button>
+  <button type="button" class="wheel__hit wheel__hit--next" data-next>{{ 'general.accessibility.next' | t }}</button>
+  <button type="button" class="wheel__hit wheel__hit--down" data-down>{{ 'general.accessibility.down' | t }}</button>
+  <button type="button" class="wheel__center" data-select>{{ 'general.accessibility.select' | t }}</button>
+</div>
