@@ -465,6 +465,8 @@
   function closeDetail() {
     detail = false;
     copyOpen = false;
+    stepToken += 1;
+    releaseStageMotion();
     clearGallery();
     refreshUnit();
     setIndex(index);
@@ -478,9 +480,20 @@
   }
 
   let productStepping = false;
+  let stepToken = 0;
+
+  function releaseStageMotion() {
+    productStepping = false;
+    [track, titleEl, detailBar].filter(Boolean).forEach((el) => {
+      el.getAnimations().forEach((anim) => anim.cancel());
+      el.style.opacity = "";
+      if (el === track) el.style.transform = "";
+    });
+  }
 
   function stepProduct(delta) {
     if (!products.length || productStepping) return;
+    const token = ++stepToken;
     const swap = () => {
       setIndex(index + delta);
       if (!detail) return;
@@ -495,6 +508,7 @@
     productStepping = true;
     const easeOut = "cubic-bezier(0.23, 1, 0.32, 1)";
     const copy = [titleEl, detailBar].filter(Boolean);
+    const alive = () => token === stepToken && detail;
     const leave = track.animate(
       [
         { opacity: 1, transform: "translateY(0px)" },
@@ -511,6 +525,7 @@
     });
     leave.finished
       .then(() => {
+        if (!alive()) return;
         swap();
         const enter = track.animate(
           [
@@ -525,16 +540,16 @@
             delay: 70,
             easing: MOVE_EASE,
             fill: "forwards",
-          }).finished.finally(() => {
-            el.style.opacity = "";
           });
         });
-        return enter.finished;
+        return enter.finished.then(() => {
+          if (!alive()) return;
+          releaseStageMotion();
+        });
       })
+      .catch(() => {})
       .finally(() => {
-        track.style.opacity = "";
-        track.style.transform = "";
-        productStepping = false;
+        if (token === stepToken) productStepping = false;
       });
   }
 
