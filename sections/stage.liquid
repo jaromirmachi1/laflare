@@ -14,6 +14,7 @@
 -%}
 
 <main id="Main" class="stage">
+  <p class="stage-loader" role="status">{{ 'general.accessibility.loading' | t }}</p>
   <header class="chrome chrome--top">
     {% render 'logo' %}
     {% render 'chrome-actions' %}
@@ -35,11 +36,11 @@
         >
           {% if item.featured_image %}
             <img
-              src="{{ item.featured_image | image_url: width: 1400 }}"
+              src="{{ item.featured_image | image_url: width: 800 }}"
               alt="{{ item.featured_image.alt | default: item.title | escape }}"
-              width="700"
-              height="700"
-              {% if forloop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %}
+              width="800"
+              height="800"
+              {% if forloop.first %}fetchpriority="high"{% else %}loading="eager"{% endif %}
             >
           {% endif %}
           {% unless item.available %}
@@ -96,7 +97,8 @@
       "quantity": {{ 'cart.quantity' | t | json }},
       "qty_up": {{ 'cart.qty_up' | t | json }},
       "qty_down": {{ 'cart.qty_down' | t | json }},
-      "preview_checkout": {{ 'cart.preview_checkout' | t | json }}
+      "preview_checkout": {{ 'cart.preview_checkout' | t | json }},
+      "total": {{ 'cart.total' | t | json }}
     },
     "products": [
       {% for item in stage_collection.products %}

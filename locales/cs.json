@@ -17,7 +17,8 @@
       "about": "About",
       "legals": "Legals",
       "account_cart": "Účet a košík",
-      "open_product": "Otevřít {{ title }}"
+      "open_product": "Otevřít {{ title }}",
+      "loading": "Načítání"
     }
   },
   "about": {
@@ -63,6 +64,7 @@
     "title": "Košík",
     "empty": "Košík je prázdný",
     "checkout": "Pokladna",
+    "total": "Celkem",
     "remove": "Odebrat",
     "quantity": "Množství",
     "qty_up": "Zvýšit množství",

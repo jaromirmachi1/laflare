@@ -26,6 +26,8 @@
   const cartCountEls = [...document.querySelectorAll("[data-cart-count]")];
   const cartLines = document.querySelector("[data-cart-lines]");
   const cartEmpty = document.querySelector("[data-cart-empty]");
+  const cartTotal = document.querySelector("[data-cart-total]");
+  const cartTotalValue = document.querySelector("[data-cart-total-value]");
   const checkoutBtn = document.querySelector("[data-checkout]");
 
   let index = Math.max(
@@ -65,6 +67,36 @@
     const n = Number(centsOrString);
     if (Number.isNaN(n)) return stripMoneyHtml(centsOrString);
     return `${Math.round(n).toLocaleString("cs-CZ")} Kč`;
+  }
+
+  function formatCrowns(crowns) {
+    return `${Math.round(Number(crowns) || 0).toLocaleString("cs-CZ")} Kč`;
+  }
+
+  function crownsFromFormatted(value) {
+    return Number(String(value || "").replace(/[^\d]/g, "")) || 0;
+  }
+
+  function cartTotalCrowns(cart) {
+    if (typeof cart.total_price === "number") {
+      return Math.round(cart.total_price / 100);
+    }
+    return (cart.items || []).reduce((sum, line) => {
+      const qty = Number(line.quantity) || 1;
+      if (typeof line.final_line_price === "number") {
+        return sum + line.final_line_price / 100;
+      }
+      if (typeof line.line_price === "number") {
+        return sum + line.line_price / 100;
+      }
+      if (typeof line.final_price === "number") {
+        return sum + (line.final_price / 100) * qty;
+      }
+      if (typeof line.price === "number") {
+        return sum + (line.price / 100) * qty;
+      }
+      return sum + crownsFromFormatted(line.price_formatted) * qty;
+    }, 0);
   }
 
   function loopOffset(i, center, max) {
@@ -115,6 +147,76 @@
     el.getAnimations().forEach((anim) => {
       if (anim.id === "cover-move") anim.cancel();
     });
+  }
+
+  function bloom(el, x, scale, delay) {
+    cancelMove(el);
+    writePose(el, 0, 0.86);
+    el.style.opacity = "0";
+    el.style.willChange = "transform, opacity";
+    const anim = el.animate(
+      [
+        { transform: "translate3d(0px, 0, 0) scale(0.86)", opacity: 0 },
+        { transform: `translate3d(${x}px, 0, 0) scale(${scale})`, opacity: 1 },
+      ],
+      {
+        duration: 760,
+        delay,
+        easing: MOVE_EASE,
+        fill: "forwards",
+        id: "cover-move",
+      },
+    );
+    anim.finished
+      .then(() => {
+        writePose(el, x, scale);
+        el.style.opacity = "1";
+        anim.cancel();
+        el.style.willChange = "";
+      })
+      .catch(() => {
+        el.style.opacity = "1";
+        el.style.willChange = "";
+      });
+  }
+
+  function whenImagesReady(imgs) {
+    const pending = imgs.map((img) => {
+      if (img.complete && img.naturalWidth > 0) return Promise.resolve();
+      return new Promise((resolve) => {
+        img.addEventListener("load", resolve, { once: true });
+        img.addEventListener("error", resolve, { once: true });
+      });
+    });
+    return Promise.race([
+      Promise.all(pending),
+      new Promise((resolve) => window.setTimeout(resolve, 4500)),
+    ]);
+  }
+
+  function playIntro() {
+    const current = product();
+    if (titleEl) titleEl.textContent = current ? current.title : "";
+    syncDetail();
+    if (!productItems.length || reduceMotion()) {
+      productItems.forEach((el) => {
+        el.style.opacity = "1";
+      });
+      setIndex(index, true);
+      root.classList.add("is-stage-in");
+      return;
+    }
+    const max = productItems.length;
+    productItems.forEach((el, i) => {
+      const offset = loopOffset(i, index, max);
+      el.dataset.offset = String(offset);
+      el.style.zIndex = String(20 - Math.abs(offset));
+      el.classList.toggle("is-current", i === index);
+      el.tabIndex = i === index ? 0 : -1;
+      el.setAttribute("aria-hidden", i === index ? "false" : "true");
+      bloom(el, offset * unit(), itemScale(i === index), Math.min(Math.abs(offset), 3) * 70);
+    });
+    root.classList.add("is-stage-in");
   }
 
   function moveTo(el, x, scale, instant) {
@@ -234,8 +336,11 @@
         `${current.title} ${i + 1}/${imgs.length}`,
       );
       writePose(btn, 0, 1);
+      btn.style.opacity = "1";
       const img = document.createElement("img");
-      img.src = src;
+      img.src = /[?&]width=/.test(src)
+        ? src
+        : `${src}${src.includes("?") ? "&" : "?"}width=1200`;
       img.alt = current.title;
       img.width = 700;
       img.height = 700;
@@ -561,6 +666,10 @@
     const itemsList = cart.items || [];
     if (cartEmpty) cartEmpty.hidden = itemsList.length > 0;
     if (checkoutBtn) checkoutBtn.hidden = itemsList.length === 0;
+    if (cartTotal) cartTotal.hidden = itemsList.length === 0;
+    if (cartTotalValue && itemsList.length > 0) {
+      cartTotalValue.textContent = formatCrowns(cartTotalCrowns(cart));
+    }
     itemsList.forEach((line) => {
       const qty = Number(line.quantity) || 1;
       const priceLabel = stripMoneyHtml(
@@ -947,7 +1056,27 @@
     else setIndex(index, true);
   });
 
-  setIndex(index, true);
-  if (detail) openDetail();
+  if (detail) {
+    productItems.forEach((el) => {
+      el.style.opacity = "1";
+    });
+    setIndex(index, true);
+    openDetail();
+    root.classList.add("is-stage-in");
+  } else {
+    const visible = productItems.filter((el, i) => {
+      return Math.abs(loopOffset(i, index, productItems.length)) <= 1;
+    });
+    visible.forEach((el) => {
+      const img = el.querySelector("img");
+      if (!img) return;
+      img.loading = "eager";
+      img.decoding = "async";
+    });
+    const hero = productItems[index]?.querySelector("img");
+    if (hero) hero.fetchPriority = "high";
+    const imgs = visible.map((el) => el.querySelector("img")).filter(Boolean);
+    whenImagesReady(imgs).then(playIntro);
+  }
   renderCart();
 })();

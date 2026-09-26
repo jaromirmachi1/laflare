@@ -44,11 +44,12 @@
         --cursor-hover: url("cursor.svg") 4 2, auto;
       }
     </style>
-    <link rel="stylesheet" href="../assets/shop.css?v=cursor-hover" />
+    <link rel="stylesheet" href="../assets/shop.css?v=stage-chrome" />
   </head>
   <body class="template-index" data-preview="true">
     <a class="skip-link" href="#Main">Skip to content</a>
     <main id="Main" class="stage">
+      <p class="stage-loader" role="status">Loading</p>
       <header class="chrome chrome--top">
         <a class="logo logo--wordmark" href="./index.html" aria-label="LAFLARECLUB">
           <img
@@ -100,7 +101,7 @@
             aria-label="Open BEYOND ONES LIMITS TEE"
           >
             <img
-              src="https://cdn.shopify.com/s/files/1/0555/8806/1508/files/BLACKFRONT1_1.png?v=1731066007"
+              src="https://cdn.shopify.com/s/files/1/0555/8806/1508/files/BLACKFRONT1_1.png?v=1731066007&width=800"
               alt="BEYOND ONES LIMITS TEE"
               width="700"
               height="700"
@@ -116,11 +117,11 @@
             aria-label="Open CÉDRIC POSPĚŠ SI TEE"
           >
             <img
-              src="https://cdn.shopify.com/s/files/1/0555/8806/1508/files/triko3.png?v=1776505116"
+              src="https://cdn.shopify.com/s/files/1/0555/8806/1508/files/triko3.png?v=1776505116&width=800"
               alt="CÉDRIC POSPĚŠ SI TEE"
-              width="700"
-              height="700"
-              loading="lazy"
+              width="800"
+              height="800"
+              loading="eager"
             />
             <span class="sold-pill">Sold out</span>
           </button>
@@ -133,11 +134,11 @@
             aria-label="Open GOOD FRIENDS TO DO GOOD TEE"
           >
             <img
-              src="https://cdn.shopify.com/s/files/1/0555/8806/1508/files/frontcream_final.png?v=1731065352"
+              src="https://cdn.shopify.com/s/files/1/0555/8806/1508/files/frontcream_final.png?v=1731065352&width=800"
               alt="GOOD FRIENDS TO DO GOOD TEE"
-              width="700"
-              height="700"
-              loading="lazy"
+              width="800"
+              height="800"
+              loading="eager"
             />
           </button>
           <button
@@ -149,11 +150,11 @@
             aria-label="Open THIRD EYE HOODIE"
           >
             <img
-              src="https://cdn.shopify.com/s/files/1/0555/8806/1508/files/HOODIEFRONT1_2.png?v=1731066103"
+              src="https://cdn.shopify.com/s/files/1/0555/8806/1508/files/HOODIEFRONT1_2.png?v=1731066103&width=800"
               alt="THIRD EYE HOODIE"
-              width="700"
-              height="700"
-              loading="lazy"
+              width="800"
+              height="800"
+              loading="eager"
             />
           </button>
         </div>
@@ -283,14 +284,38 @@
     <div class="overlay overlay--cart" data-cart aria-hidden="true">
       <aside class="cart-panel" role="dialog" aria-modal="true" aria-labelledby="CartTitle">
         <div class="cart-panel__head">
-          <h1 id="CartTitle">Cart</h1>
-          <button type="button" class="icon-btn" data-close-cart>Close</button>
+          <h1 id="CartTitle" class="cart-panel__brand">
+            <img
+              class="cart-panel__logo"
+              src="../assets/laflarelogo.svg"
+              alt="Cart"
+              width="148"
+              height="89"
+            />
+          </h1>
+          <button
+            type="button"
+            class="cart-panel__close"
+            data-close-cart
+            aria-label="Close"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path
+                fill="currentColor"
+                d="M6.4 5.2 5.2 6.4 10.8 12l-5.6 5.6 1.2 1.2L12 13.2l5.6 5.6 1.2-1.2L13.2 12l5.6-5.6-1.2-1.2L12 10.8 6.4 5.2Z"
+              />
+            </svg>
+          </button>
         </div>
         <div class="cart-panel__body">
           <p class="cart-empty" data-cart-empty>Your cart is empty</p>
           <div class="cart-lines" data-cart-lines></div>
         </div>
         <div class="cart-panel__foot">
+          <div class="cart-total" data-cart-total hidden>
+            <span class="cart-total__label">Total</span>
+            <span class="cart-total__value" data-cart-total-value></span>
+          </div>
           <button type="button" class="atc" data-checkout>Checkout</button>
         </div>
       </aside>
@@ -458,7 +483,8 @@
           "quantity": "Quantity",
           "qty_up": "Increase quantity",
           "qty_down": "Decrease quantity",
-          "preview_checkout": "Preview only. Upload this theme to Shopify to checkout."
+          "preview_checkout": "Preview only. Upload this theme to Shopify to checkout.",
+          "total": "Total"
         },
         "products": [
           {
@@ -618,6 +644,6 @@
         ]
       }
     </script>
-    <script src="../assets/shop.js?v=chrome-flat" defer></script>
+    <script src="../assets/shop.js?v=cover-ready" defer></script>
   </body>
 </html>

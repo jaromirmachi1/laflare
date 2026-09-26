@@ -17,7 +17,8 @@
       "about": "About",
       "legals": "Legals",
       "account_cart": "Account and cart",
-      "open_product": "Open {{ title }}"
+      "open_product": "Open {{ title }}",
+      "loading": "Loading"
     }
   },
   "about": {
@@ -63,6 +64,7 @@
     "title": "Cart",
     "empty": "Your cart is empty",
     "checkout": "Checkout",
+    "total": "Total",
     "remove": "Remove",
     "quantity": "Quantity",
     "qty_up": "Increase quantity",
