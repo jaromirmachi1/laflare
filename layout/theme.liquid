@@ -28,8 +28,8 @@
     {% endif %}
     <meta name="twitter:card" content="summary_large_image">
     {{ content_for_header }}
-    {{ 'shop.css' | asset_url | stylesheet_tag }}
     {% render 'fonts' %}
+    {{ 'shop.css' | asset_url | stylesheet_tag }}
   </head>
   <body
     class="template-{{ template | split: '.' | first | replace: '/', '-' }}"

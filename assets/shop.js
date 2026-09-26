@@ -477,14 +477,65 @@
     else setIndex(index + delta, instant);
   }
 
+  let productStepping = false;
+
   function stepProduct(delta) {
-    if (!products.length) return;
-    setIndex(index + delta);
-    if (detail) {
+    if (!products.length || productStepping) return;
+    const swap = () => {
+      setIndex(index + delta);
+      if (!detail) return;
       refreshUnit();
       buildGallery();
       document.querySelector(".coverflow")?.scrollTo({ top: 0 });
+    };
+    if (!detail || reduceMotion() || !track) {
+      swap();
+      return;
     }
+    productStepping = true;
+    const easeOut = "cubic-bezier(0.23, 1, 0.32, 1)";
+    const copy = [titleEl, detailBar].filter(Boolean);
+    const leave = track.animate(
+      [
+        { opacity: 1, transform: "translateY(0px)" },
+        { opacity: 0, transform: "translateY(-28px)" },
+      ],
+      { duration: 280, easing: easeOut, fill: "forwards" },
+    );
+    copy.forEach((el) => {
+      el.animate([{ opacity: 1 }, { opacity: 0 }], {
+        duration: 200,
+        easing: easeOut,
+        fill: "forwards",
+      });
+    });
+    leave.finished
+      .then(() => {
+        swap();
+        const enter = track.animate(
+          [
+            { opacity: 0, transform: "translateY(32px)" },
+            { opacity: 1, transform: "translateY(0px)" },
+          ],
+          { duration: 520, easing: MOVE_EASE, fill: "forwards" },
+        );
+        copy.forEach((el) => {
+          el.animate([{ opacity: 0 }, { opacity: 1 }], {
+            duration: 420,
+            delay: 70,
+            easing: MOVE_EASE,
+            fill: "forwards",
+          }).finished.finally(() => {
+            el.style.opacity = "";
+          });
+        });
+        return enter.finished;
+      })
+      .finally(() => {
+        track.style.opacity = "";
+        track.style.transform = "";
+        productStepping = false;
+      });
   }
 
   function toggleMenu(open) {
@@ -784,6 +835,40 @@
   });
   window.addEventListener("pointerup", clearWheelPress);
   window.addEventListener("pointercancel", clearWheelPress);
+
+  let wheelLocked = false;
+  let wheelUnlockTimer = 0;
+  const WHEEL_LOCK_MS = 620;
+
+  function stageBlocksWheel() {
+    return (
+      cartOverlay?.classList.contains("is-open") ||
+      menu?.classList.contains("is-open") ||
+      legalsOverlay?.classList.contains("is-open") ||
+      root.classList.contains("is-info")
+    );
+  }
+
+  window.addEventListener(
+    "wheel",
+    (event) => {
+      if (stageBlocksWheel()) return;
+      if (!products.length) return;
+      const dx = event.deltaX;
+      const dy = event.deltaY;
+      if (Math.abs(dx) < 4 && Math.abs(dy) < 4) return;
+      event.preventDefault();
+      if (wheelLocked) return;
+      wheelLocked = true;
+      window.clearTimeout(wheelUnlockTimer);
+      wheelUnlockTimer = window.setTimeout(() => {
+        wheelLocked = false;
+      }, WHEEL_LOCK_MS);
+      const delta = Math.abs(dx) > Math.abs(dy) ? dx : dy;
+      step(delta > 0 ? 1 : -1);
+    },
+    { passive: false },
+  );
 
   document.querySelector("[data-prev]")?.addEventListener("click", () => {
     if (cartOverlay?.classList.contains("is-open")) return;
