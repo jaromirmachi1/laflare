@@ -48,8 +48,10 @@
   let copyOpen = false;
   let dragX = 0;
   let startX = 0;
+  let startY = 0;
   let dragArmed = false;
   let dragging = false;
+  let dragAxis = null;
   let ignoreClick = false;
   let unitCache = 0;
 
@@ -1123,11 +1125,12 @@
 
   function settleFromDrag() {
     track.classList.remove("is-dragging");
-    if (Math.abs(dragX) > DRAG_STEP) step(dragX < 0 ? 1 : -1);
+    if (dragAxis !== "y" && Math.abs(dragX) > DRAG_STEP) step(dragX < 0 ? 1 : -1);
     else if (detail) setImageIndex(imageIndex);
     else setIndex(index);
     dragX = 0;
     dragging = false;
+    dragAxis = null;
   }
 
   track?.addEventListener(
@@ -1145,13 +1148,37 @@
     if (detail && productImages().length < 2) return;
     dragArmed = true;
     dragging = false;
+    dragAxis = null;
     startX = event.clientX;
+    startY = event.clientY;
     dragX = 0;
-    track.setPointerCapture(event.pointerId);
+    if (!(detail && isMobileInfo())) {
+      track.setPointerCapture(event.pointerId);
+    }
   });
   track?.addEventListener("pointermove", (event) => {
-    if (!dragArmed) return;
-    dragX = event.clientX - startX;
+    if (!dragArmed || dragAxis === "y") return;
+    const dx = event.clientX - startX;
+    const dy = event.clientY - startY;
+
+    if (detail && isMobileInfo() && !dragAxis) {
+      if (Math.abs(dx) < DRAG_START && Math.abs(dy) < DRAG_START) return;
+      if (Math.abs(dy) >= Math.abs(dx)) {
+        dragAxis = "y";
+        dragArmed = false;
+        dragging = false;
+        dragX = 0;
+        return;
+      }
+      dragAxis = "x";
+      try {
+        track.setPointerCapture(event.pointerId);
+      } catch (_) {
+        /* ignore */
+      }
+    }
+
+    dragX = dx;
     if (!dragging && Math.abs(dragX) < DRAG_START) return;
     dragging = true;
     track.classList.add("is-dragging");
@@ -1167,7 +1194,10 @@
     });
   });
   track?.addEventListener("pointerup", () => {
-    if (!dragArmed) return;
+    if (!dragArmed && dragAxis !== "x") {
+      dragAxis = null;
+      return;
+    }
     dragArmed = false;
     if (dragging) {
       ignoreClick = true;
@@ -1179,14 +1209,19 @@
     }
     dragging = false;
     dragX = 0;
+    dragAxis = null;
   });
   track?.addEventListener("pointercancel", () => {
-    if (!dragArmed) return;
+    if (!dragArmed && dragAxis !== "x") {
+      dragAxis = null;
+      return;
+    }
     dragArmed = false;
     if (dragging) settleFromDrag();
     else {
       dragging = false;
       dragX = 0;
+      dragAxis = null;
     }
   });
 

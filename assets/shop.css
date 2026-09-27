@@ -274,7 +274,7 @@ body.is-detail .logo {
   margin: 0;
   padding: 0;
   border: 0;
-  border-radius: 14px;
+  border-radius: 999px;
   overflow: hidden;
   background: var(--black);
   cursor: var(--cursor);
@@ -1733,7 +1733,7 @@ body.is-info .product-copy.is-open {
     min-height: 0;
     padding: calc(var(--header-h) + 8px) 0 4px;
     overflow: hidden;
-    touch-action: pan-x;
+    touch-action: pan-y;
   }
 
   body.is-detail.is-info .coverflow__track {
@@ -1782,7 +1782,12 @@ body.is-info .product-copy.is-open {
   body.is-detail.is-info .coverflow,
   body.is-detail.is-info .coverflow__track,
   body.is-detail.is-info .cover-item[data-shot] {
-    touch-action: pan-x;
+    touch-action: pan-y;
+  }
+
+  body.is-detail.is-info .coverflow__track.is-dragging,
+  body.is-detail.is-info .coverflow__track.is-dragging .cover-item[data-shot] {
+    touch-action: none;
   }
 
   body.is-detail.is-info .product-title {
