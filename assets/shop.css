@@ -596,6 +596,9 @@ body.is-detail .sold-pill {
   height: var(--wheel-size);
   transform: none;
   cursor: var(--cursor);
+  transition:
+    width 280ms var(--ease-out),
+    height 280ms var(--ease-out);
 }
 
 .wheel {
@@ -612,6 +615,7 @@ body.is-detail .sold-pill {
   user-select: none;
   -webkit-user-select: none;
   cursor: var(--cursor);
+  transition: border-radius 280ms var(--ease-out);
 }
 
 .wheel__center {
@@ -1663,6 +1667,86 @@ body.is-info .product-copy.is-open {
   body.is-detail.is-info .detail-bar {
     top: calc(var(--header-h) + min(38dvh, 280px) + 36px);
     bottom: calc(var(--wheel-size) + var(--wheel-offset) + 8px);
+  }
+
+  body.is-detail {
+    --wheel-size: 64px;
+    --wheel-offset: 18px;
+  }
+
+  body.is-detail .wheel-wrap {
+    width: min(86vw, 340px);
+    height: 64px;
+  }
+
+  body.is-detail .wheel {
+    border-radius: 999px;
+    background: #1a1a1a;
+    box-shadow: inset 0 -8px 12px rgb(0 0 0 / 0.35);
+  }
+
+  body.is-detail .wheel__label,
+  body.is-detail .wheel__down,
+  body.is-detail .wheel__hit--down,
+  body.is-detail .wheel__center {
+    display: none;
+  }
+
+  body.is-detail .wheel__hit--menu {
+    left: 50%;
+    top: 50%;
+    right: auto;
+    width: 46px;
+    height: 46px;
+    border: 1.5px solid #3a3a3a;
+    border-radius: 50%;
+    background: transparent;
+    box-shadow: none;
+    transform: translate(-50%, -50%);
+  }
+
+  body.is-detail .wheel__hit--menu:active,
+  body.is-detail .wheel__hit--menu.is-pressed {
+    box-shadow: none;
+    transform: translate(-50%, -50%) scale(0.97);
+  }
+
+  body.is-detail .wheel__hit--prev,
+  body.is-detail .wheel__hit--next {
+    top: 0;
+    height: 100%;
+    border-radius: 999px;
+    box-shadow: none;
+  }
+
+  body.is-detail .wheel__hit--prev {
+    left: 0;
+    width: 34%;
+  }
+
+  body.is-detail .wheel__hit--next {
+    right: 0;
+    width: 34%;
+  }
+
+  body.is-detail .wheel__hit--prev:active,
+  body.is-detail .wheel__hit--next:active,
+  body.is-detail .wheel__hit--prev.is-pressed,
+  body.is-detail .wheel__hit--next.is-pressed {
+    box-shadow: none;
+  }
+
+  body.is-detail .wheel__skip {
+    width: 26px;
+    color: #f2f2f2;
+  }
+
+  body.is-detail .wheel__skip--prev {
+    left: 16%;
+  }
+
+  body.is-detail .wheel__skip--next {
+    right: 16%;
   }
 }
 
