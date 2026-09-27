@@ -27,7 +27,8 @@
       "legals": "Legals",
       "account_cart": "Account and cart",
       "open_product": "Open {{ title }}",
-      "loading": "Loading"
+      "loading": "Loading",
+      "enter": "Enter"
     }
   },
   "about": {

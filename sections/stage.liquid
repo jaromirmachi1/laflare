@@ -13,6 +13,10 @@
   endif
 -%}
 
+{% if request.page_type == 'index' %}
+  {% render 'intro-gate' %}
+{% endif %}
+
 <main id="Main" class="stage">
   <p class="stage-loader" role="status">{{ 'general.accessibility.loading' | t }}</p>
   <header class="chrome chrome--top">

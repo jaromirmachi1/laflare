@@ -1,4 +1,204 @@
 (() => {
+  let unlockStage = () => {};
+  const stageReady = new Promise((resolve) => {
+    unlockStage = resolve;
+  });
+
+  const intro = document.querySelector("[data-intro]");
+  if (intro) {
+    try {
+      if (sessionStorage.getItem("laflare-entered") === "1") intro.remove();
+    } catch (err) {
+      /* private mode */
+    }
+  }
+
+  if (intro?.isConnected) {
+    document.body.classList.add("is-intro", "is-wheel-held");
+    const left = intro.querySelector('[data-intro-track="left"]');
+    const right = intro.querySelector('[data-intro-track="right"]');
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const SLIDE_MS = 1600;
+    const HOLD_MS = 1600;
+    let step = 0;
+    let raf = 0;
+    let holdTimer = 0;
+
+    function shuffle(list) {
+      const out = list.slice();
+      for (let i = out.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const tmp = out[i];
+        out[i] = out[j];
+        out[j] = tmp;
+      }
+      return out;
+    }
+
+    function shotSrcs(track) {
+      const imgs = [...(track?.querySelectorAll(".intro__shot img") || [])];
+      const half = Math.max(1, Math.floor(imgs.length / 2));
+      return imgs.slice(0, half).map((img) => img.currentSrc || img.src);
+    }
+
+    function fillTrack(track, srcs) {
+      if (!track || !srcs.length) return;
+      const frag = document.createDocumentFragment();
+      for (let pass = 0; pass < 2; pass += 1) {
+        srcs.forEach((src) => {
+          const fig = document.createElement("figure");
+          fig.className = "intro__shot";
+          const img = document.createElement("img");
+          img.src = src;
+          img.alt = "";
+          img.width = 1800;
+          img.height = 1800;
+          img.decoding = "async";
+          img.loading = "eager";
+          fig.appendChild(img);
+          frag.appendChild(fig);
+        });
+      }
+      track.replaceChildren(frag);
+    }
+
+    // Opposite scroll shows L[k] beside R[(n-k)%n]. Build two independent
+    // orders and keep those visible pairs from matching.
+    function pairOrders(srcs) {
+      const leftOrder = shuffle(srcs);
+      const n = leftOrder.length;
+      const clashes = (right) => {
+        let count = 0;
+        for (let k = 0; k < n; k += 1) {
+          if (leftOrder[k] === right[(n - k) % n]) count += 1;
+        }
+        return count;
+      };
+      let rightOrder = shuffle(srcs);
+      for (let pass = 0; pass < 12; pass += 1) {
+        if (clashes(rightOrder) === 0) break;
+        rightOrder = shuffle(srcs);
+      }
+      for (let k = 0; k < n; k += 1) {
+        const ri = (n - k) % n;
+        if (rightOrder[ri] !== leftOrder[k]) continue;
+        for (let trySwap = 0; trySwap < n; trySwap += 1) {
+          const sj = (ri + 1 + trySwap) % n;
+          const sk = (n - sj) % n;
+          if (rightOrder[sj] === leftOrder[k]) continue;
+          if (rightOrder[ri] === leftOrder[sk]) continue;
+          const tmp = rightOrder[ri];
+          rightOrder[ri] = rightOrder[sj];
+          rightOrder[sj] = tmp;
+          break;
+        }
+      }
+      return { leftOrder, rightOrder };
+    }
+
+    const pool = shotSrcs(left);
+    const { leftOrder, rightOrder } = pairOrders(pool);
+    fillTrack(left, leftOrder);
+    fillTrack(right, rightOrder);
+
+    function metrics() {
+      const shot = left?.querySelector(".intro__shot");
+      const width = shot?.getBoundingClientRect().width || 0;
+      const span = width * ((left?.children.length || 0) / 2);
+      return { width, span };
+    }
+
+    function place(px) {
+      const { span } = metrics();
+      if (!span) return;
+      const offset = ((px % span) + span) % span;
+      left.style.transform = `translate3d(${-offset}px,0,0)`;
+      if (right) right.style.transform = `translate3d(${-(span - offset)}px,0,0)`;
+    }
+
+    function easeOut(t) {
+      return 1 - (1 - t) ** 5;
+    }
+
+    function slideNext() {
+      const { width, span } = metrics();
+      if (!width || !span) return;
+      const from = step * width;
+      const dest = (step + 1) * width;
+      const start = performance.now();
+      const frame = (now) => {
+        const t = Math.min(1, (now - start) / SLIDE_MS);
+        place(from + (dest - from) * easeOut(t));
+        if (t < 1) {
+          raf = requestAnimationFrame(frame);
+          return;
+        }
+        step += 1;
+        if (step * width >= span - 0.5) {
+          step = 0;
+          place(0);
+        }
+        holdTimer = window.setTimeout(slideNext, HOLD_MS);
+      };
+      raf = requestAnimationFrame(frame);
+    }
+
+    place(0);
+    if (!reduce) holdTimer = window.setTimeout(slideNext, HOLD_MS);
+    window.addEventListener("resize", () => place(step * (metrics().width || 0)));
+
+    let closed = false;
+    const closeIntro = () => {
+      if (closed) return;
+      closed = true;
+      try {
+        sessionStorage.setItem("laflare-entered", "1");
+      } catch (err) {
+        /* private mode */
+      }
+      cancelAnimationFrame(raf);
+      window.clearTimeout(holdTimer);
+      intro.classList.add("is-leaving");
+      document.body.classList.remove("is-intro");
+      if (selectBtn) {
+        if (priorLabel == null) selectBtn.removeAttribute("aria-label");
+        else selectBtn.setAttribute("aria-label", priorLabel);
+      }
+      if (menuLabel) menuLabel.textContent = priorMenu;
+      unlockStage();
+      window.setTimeout(() => intro.remove(), 640);
+    };
+
+    const selectBtn = document.querySelector("[data-select]");
+    const priorLabel = selectBtn?.getAttribute("aria-label") ?? null;
+    const menuLabel = document.querySelector("[data-wheel-menu-label]");
+    const priorMenu = menuLabel?.textContent ?? "";
+    const enterLabel = intro.getAttribute("data-enter-label") || "Enter";
+    if (menuLabel) menuLabel.textContent = enterLabel;
+    if (selectBtn) {
+      selectBtn.setAttribute("aria-label", enterLabel);
+      selectBtn.addEventListener(
+        "click",
+        (event) => {
+          if (closed || !document.body.classList.contains("is-intro")) return;
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          closeIntro();
+        },
+        true,
+      );
+      selectBtn.focus({ preventScroll: true });
+    }
+    window.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter" || !document.body.classList.contains("is-intro")) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      closeIntro();
+    });
+  } else {
+    unlockStage();
+  }
+
   const root = document.body;
   const dataEl = document.getElementById("StageData");
   if (!dataEl) return;
@@ -944,6 +1144,7 @@
   window.addEventListener(
     "wheel",
     (event) => {
+      if (root.classList.contains("is-intro")) return;
       if (stageBlocksWheel()) return;
       if (!products.length) return;
       const dx = event.deltaX;
@@ -963,6 +1164,7 @@
   );
 
   document.querySelector("[data-prev]")?.addEventListener("click", () => {
+    if (root.classList.contains("is-intro")) return;
     if (cartOverlay?.classList.contains("is-open")) return;
     if (menu?.classList.contains("is-open")) {
       setMenuIndex(activeMenuIndex() - 1);
@@ -973,6 +1175,7 @@
     step(-1);
   });
   document.querySelector("[data-next]")?.addEventListener("click", () => {
+    if (root.classList.contains("is-intro")) return;
     if (cartOverlay?.classList.contains("is-open")) return;
     if (menu?.classList.contains("is-open")) {
       setMenuIndex(activeMenuIndex() + 1);
@@ -983,6 +1186,7 @@
     step(1);
   });
   document.querySelector("[data-down]")?.addEventListener("click", () => {
+    if (root.classList.contains("is-intro")) return;
     if (cartOverlay?.classList.contains("is-open")) return;
     if (menu?.classList.contains("is-open")) {
       setMenuIndex(activeMenuIndex() + 1);
@@ -993,6 +1197,7 @@
     stepProduct(1);
   });
   document.querySelector("[data-select]")?.addEventListener("click", () => {
+    if (root.classList.contains("is-intro")) return;
     if (menu?.classList.contains("is-open")) return activateMenuItem();
     if (cartOverlay?.classList.contains("is-open")) return toggleCart(false);
     if (infoOverlay?.classList.contains("is-open")) {
@@ -1022,6 +1227,7 @@
     openDetail();
   });
   document.querySelector("[data-menu-btn]")?.addEventListener("click", () => {
+    if (root.classList.contains("is-intro")) return;
     if (cartOverlay?.classList.contains("is-open")) return toggleCart(false);
     if (infoOverlay?.classList.contains("is-open")) {
       copyOpen = false;
@@ -1226,6 +1432,7 @@
   });
 
   window.addEventListener("keydown", (event) => {
+    if (root.classList.contains("is-intro")) return;
     if (menu?.classList.contains("is-open")) {
       if (event.key === "ArrowLeft") {
         event.preventDefault();
@@ -1291,7 +1498,10 @@
     const hero = productItems[index]?.querySelector("img");
     if (hero) hero.fetchPriority = "high";
     const imgs = visible.map((el) => el.querySelector("img")).filter(Boolean);
-    whenImagesReady(imgs).then(playIntro);
+    Promise.all([whenImagesReady(imgs), stageReady]).then(() => {
+      refreshUnit();
+      playIntro();
+    });
   }
   renderCart();
 })();

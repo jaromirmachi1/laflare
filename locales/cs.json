@@ -27,7 +27,8 @@
       "legals": "Legals",
       "account_cart": "Účet a košík",
       "open_product": "Otevřít {{ title }}",
-      "loading": "Načítání"
+      "loading": "Načítání",
+      "enter": "Enter"
     }
   },
   "about": {
