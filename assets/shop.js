@@ -499,7 +499,11 @@
       if (!detail) return;
       refreshUnit();
       buildGallery();
-      document.querySelector(".coverflow")?.scrollTo({ top: 0 });
+      const mobile = window.matchMedia("(max-width: 767px)").matches;
+      const scroller = mobile
+        ? document.querySelector(".stage")
+        : document.querySelector(".coverflow");
+      scroller?.scrollTo({ top: 0 });
     };
     if (!detail || reduceMotion() || !track) {
       swap();
@@ -681,10 +685,14 @@
   }
 
   function scrollInfo(dir) {
-    const flow = document.querySelector(".coverflow");
-    if (!flow || !root.classList.contains("is-info")) return;
-    const stepPx = Math.max(160, Math.round(flow.clientHeight * 0.42)) * dir;
-    flow.scrollBy({ top: stepPx, behavior: "smooth" });
+    if (!root.classList.contains("is-info")) return;
+    const mobile = window.matchMedia("(max-width: 767px)").matches;
+    const scroller = mobile
+      ? document.querySelector(".stage")
+      : document.querySelector(".coverflow");
+    if (!scroller) return;
+    const stepPx = Math.max(160, Math.round(scroller.clientHeight * 0.42)) * dir;
+    scroller.scrollBy({ top: stepPx, behavior: "smooth" });
   }
 
   function toggleLegals(open) {
