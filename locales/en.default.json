@@ -81,7 +81,7 @@
     "qty_down": "Decrease quantity",
     "preview_checkout": "Preview only. Upload this theme to Shopify to checkout.",
     "shipping_remain": "Add {{ amount }} more for free shipping",
-    "shipping_unlocked": "You've unlocked free shipping"
+    "shipping_unlocked": "You unlocked free shipping"
   },
   "search": {
     "placeholder": "Search",

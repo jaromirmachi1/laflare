@@ -205,7 +205,18 @@
 
   const data = JSON.parse(dataEl.textContent);
   const products = data.products || [];
-  const i18n = data.i18n || {};
+  const decodeEntities = (value) => {
+    if (typeof value !== "string" || !value.includes("&")) return value;
+    const el = document.createElement("textarea");
+    el.innerHTML = value;
+    return el.value;
+  };
+  const i18n = Object.fromEntries(
+    Object.entries(data.i18n || {}).map(([key, value]) => [
+      key,
+      decodeEntities(value),
+    ]),
+  );
   const isPreview = data.preview === true;
 
   const titleEl = document.querySelector("[data-product-title]");
@@ -995,7 +1006,7 @@
       if (hasItems && cartShipMsg) {
         if (crowns >= FREE_SHIPPING_CZK) {
           cartShipMsg.textContent =
-            i18n.shipping_unlocked || "You've unlocked free shipping";
+            i18n.shipping_unlocked || "You unlocked free shipping";
         } else {
           const remain = FREE_SHIPPING_CZK - crowns;
           const template =
