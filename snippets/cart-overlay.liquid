@@ -29,6 +29,12 @@
       <div class="cart-lines" data-cart-lines></div>
     </div>
     <div class="cart-panel__foot">
+      <div class="cart-ship" data-cart-ship hidden>
+        <p class="cart-ship__msg" data-cart-ship-msg></p>
+        <div class="cart-ship__track" aria-hidden="true">
+          <span class="cart-ship__fill" data-cart-ship-fill></span>
+        </div>
+      </div>
       <div class="cart-total" data-cart-total hidden>
         <span class="cart-total__label">{{ 'cart.total' | t }}</span>
         <span class="cart-total__value" data-cart-total-value></span>

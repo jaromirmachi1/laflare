@@ -78,7 +78,9 @@
     "quantity": "Množství",
     "qty_up": "Zvýšit množství",
     "qty_down": "Snížit množství",
-    "preview_checkout": "Náhled. Nahrajte téma do Shopify pro objednávku."
+    "preview_checkout": "Náhled. Nahrajte téma do Shopify pro objednávku.",
+    "shipping_remain": "Přidej ještě {{ amount }} a máš dopravu zdarma",
+    "shipping_unlocked": "Máš dopravu zdarma"
   },
   "search": {
     "placeholder": "Hledat",

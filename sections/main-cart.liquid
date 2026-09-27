@@ -13,7 +13,7 @@
           <img src="{{ item.image | image_url: width: 200 }}" alt="{{ item.title | escape }}">
           <div>
             <p>{{ item.product.title }}</p>
-            <span>{{ item.quantity }} · {{ item.final_line_price | money }}</span>
+            <span>{{ item.quantity }} · {{ item.final_line_price | money_without_currency }} CZK</span>
           </div>
         </div>
       {% endfor %}

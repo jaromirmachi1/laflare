@@ -28,7 +28,11 @@
   const cartEmpty = document.querySelector("[data-cart-empty]");
   const cartTotal = document.querySelector("[data-cart-total]");
   const cartTotalValue = document.querySelector("[data-cart-total-value]");
+  const cartShip = document.querySelector("[data-cart-ship]");
+  const cartShipMsg = document.querySelector("[data-cart-ship-msg]");
+  const cartShipFill = document.querySelector("[data-cart-ship-fill]");
   const checkoutBtn = document.querySelector("[data-checkout]");
+  const FREE_SHIPPING_CZK = 2000;
 
   let index = Math.max(
     0,
@@ -58,6 +62,8 @@
   function stripMoneyHtml(value) {
     return String(value || "")
       .replace(/<[^>]*>/g, "")
+      .replace(/\s*Kč/g, " CZK")
+      .replace(/\s+/g, " ")
       .trim();
   }
 
@@ -66,11 +72,11 @@
       return stripMoneyHtml(product().price_formatted);
     const n = Number(centsOrString);
     if (Number.isNaN(n)) return stripMoneyHtml(centsOrString);
-    return `${Math.round(n).toLocaleString("cs-CZ")} Kč`;
+    return `${Math.round(n).toLocaleString("cs-CZ")} CZK`;
   }
 
   function formatCrowns(crowns) {
-    return `${Math.round(Number(crowns) || 0).toLocaleString("cs-CZ")} Kč`;
+    return `${Math.round(Number(crowns) || 0).toLocaleString("cs-CZ")} CZK`;
   }
 
   function crownsFromFormatted(value) {
@@ -256,6 +262,17 @@
       });
   }
 
+  function markGallerySliding(active) {
+    if (!track) return;
+    track.classList.toggle("is-sliding", Boolean(active));
+    if (active) {
+      window.clearTimeout(markGallerySliding.timer);
+      markGallerySliding.timer = window.setTimeout(() => {
+        track.classList.remove("is-sliding");
+      }, MOVE_MS + 40);
+    }
+  }
+
   function positionItems(list, center, instant) {
     const max = list.length;
     if (!max) return;
@@ -267,13 +284,20 @@
           el.style.zIndex = "";
           el.style.willChange = "";
           writePose(el, 0, 1);
-          el.classList.toggle("is-current", i === 0);
-          el.tabIndex = 0;
-          el.setAttribute("aria-hidden", "false");
+          el.classList.toggle("is-current", i === center);
+          el.tabIndex = i === center ? 0 : -1;
+          el.setAttribute("aria-hidden", i === center ? "false" : "true");
+        });
+        list[center]?.scrollIntoView({
+          behavior: reduceMotion() ? "auto" : "smooth",
+          block: "nearest",
         });
         return;
       }
     }
+    const gallerySlide =
+      detail && list === galleryItems && isMobileInfo() && !instant;
+    if (gallerySlide) markGallerySliding(true);
     list.forEach((el, i) => {
       const offset = loopOffset(i, center, max);
       const hadPrev = el.dataset.offset != null;
@@ -309,6 +333,7 @@
     if (!imgs.length) return;
     const max = imgs.length;
     imageIndex = ((next % max) + max) % max;
+    if (isMobileInfo()) refreshUnit();
     positionItems(galleryItems, imageIndex, fromDrag);
   }
 
@@ -338,7 +363,8 @@
         `${current.title} ${i + 1}/${imgs.length}`,
       );
       writePose(btn, 0, 1);
-      btn.style.opacity = "1";
+      btn.style.opacity = i === 0 ? "1" : "0";
+      if (i === 0) btn.classList.add("is-current");
       const img = document.createElement("img");
       img.src = /[?&]width=/.test(src)
         ? src
@@ -743,8 +769,34 @@
     if (cartEmpty) cartEmpty.hidden = itemsList.length > 0;
     if (checkoutBtn) checkoutBtn.hidden = itemsList.length === 0;
     if (cartTotal) cartTotal.hidden = itemsList.length === 0;
+    const crowns = cartTotalCrowns(cart);
     if (cartTotalValue && itemsList.length > 0) {
-      cartTotalValue.textContent = formatCrowns(cartTotalCrowns(cart));
+      cartTotalValue.textContent = formatCrowns(crowns);
+    }
+    if (cartShip) {
+      const hasItems = itemsList.length > 0;
+      cartShip.hidden = !hasItems;
+      cartShip.classList.toggle("is-unlocked", hasItems && crowns >= FREE_SHIPPING_CZK);
+      if (hasItems && cartShipMsg) {
+        if (crowns >= FREE_SHIPPING_CZK) {
+          cartShipMsg.textContent =
+            i18n.shipping_unlocked || "You've unlocked free shipping";
+        } else {
+          const remain = FREE_SHIPPING_CZK - crowns;
+          const template =
+            i18n.shipping_remain || "Add {{ amount }} more for free shipping";
+          cartShipMsg.textContent = template.replace(
+            "{{ amount }}",
+            formatCrowns(remain),
+          );
+        }
+      }
+      if (cartShipFill) {
+        const pct = hasItems
+          ? Math.min(100, Math.round((crowns / FREE_SHIPPING_CZK) * 100))
+          : 0;
+        cartShipFill.style.width = `${pct}%`;
+      }
     }
     itemsList.forEach((line) => {
       const qty = Number(line.quantity) || 1;
@@ -902,10 +954,7 @@
       return;
     }
     if (legalsOverlay?.classList.contains("is-open")) return scrollLegals(-1);
-    if (root.classList.contains("is-info")) {
-      if (isMobileInfo()) return step(-1);
-      return scrollInfo(-1);
-    }
+    if (detail) return step(-1);
     step(-1);
   });
   document.querySelector("[data-next]")?.addEventListener("click", () => {
@@ -915,10 +964,7 @@
       return;
     }
     if (legalsOverlay?.classList.contains("is-open")) return scrollLegals(1);
-    if (root.classList.contains("is-info")) {
-      if (isMobileInfo()) return step(1);
-      return scrollInfo(1);
-    }
+    if (detail) return step(1);
     step(1);
   });
   document.querySelector("[data-down]")?.addEventListener("click", () => {

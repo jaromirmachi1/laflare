@@ -25,7 +25,7 @@
         --font-geist-pixel: "Geist Pixel", sans-serif;
       }
     </style>
-    <link rel="stylesheet" href="../assets/shop.css?v=title-desk" />
+    <link rel="stylesheet" href="../assets/shop.css?v=hide-gallery" />
   </head>
   <body class="template-index" data-preview="true">
     <a class="skip-link" href="#Main">Skip to content</a>
@@ -293,6 +293,12 @@
           <div class="cart-lines" data-cart-lines></div>
         </div>
         <div class="cart-panel__foot">
+          <div class="cart-ship" data-cart-ship hidden>
+            <p class="cart-ship__msg" data-cart-ship-msg></p>
+            <div class="cart-ship__track" aria-hidden="true">
+              <span class="cart-ship__fill" data-cart-ship-fill></span>
+            </div>
+          </div>
           <div class="cart-total" data-cart-total hidden>
             <span class="cart-total__label">Total</span>
             <span class="cart-total__value" data-cart-total-value></span>
@@ -465,7 +471,9 @@
           "qty_up": "Increase quantity",
           "qty_down": "Decrease quantity",
           "preview_checkout": "Preview only. Upload this theme to Shopify to checkout.",
-          "total": "Total"
+          "total": "Total",
+          "shipping_remain": "Add {{ amount }} more for free shipping",
+          "shipping_unlocked": "You've unlocked free shipping"
         },
         "products": [
           {
@@ -474,7 +482,7 @@
             "title": "BEYOND ONES LIMITS TEE",
             "url": "./index.html",
             "available": true,
-            "price_formatted": "1.290 Kč",
+            "price_formatted": "1.290 CZK",
             "description": "Oversized heavyweight 260gsm organic cotton tee. Screen print front and back, distressed details, ribbed crew neck.",
             "images": [
               "https://cdn.shopify.com/s/files/1/0555/8806/1508/files/BLACKFRONT1_1.png?v=1731066007",
@@ -485,25 +493,25 @@
                 "id": 46376040497476,
                 "title": "S",
                 "available": true,
-                "price_formatted": "1.290 Kč"
+                "price_formatted": "1.290 CZK"
               },
               {
                 "id": 46376040530244,
                 "title": "M",
                 "available": true,
-                "price_formatted": "1.290 Kč"
+                "price_formatted": "1.290 CZK"
               },
               {
                 "id": 46376040563012,
                 "title": "L",
                 "available": true,
-                "price_formatted": "1.290 Kč"
+                "price_formatted": "1.290 CZK"
               },
               {
                 "id": 46376040595780,
                 "title": "XL",
                 "available": true,
-                "price_formatted": "1.290 Kč"
+                "price_formatted": "1.290 CZK"
               }
             ]
           },
@@ -513,7 +521,7 @@
             "title": "CÉDRIC POSPĚŠ SI TEE",
             "url": "./index.html",
             "available": false,
-            "price_formatted": "649 Kč",
+            "price_formatted": "649 CZK",
             "description": "33 numbered tees. DTF heading, hand-sprayed number by Cédric. Closed series, no restocks.",
             "images": [
               "https://cdn.shopify.com/s/files/1/0555/8806/1508/files/triko3.png?v=1776505116"
@@ -523,25 +531,25 @@
                 "id": 56679027179844,
                 "title": "S",
                 "available": false,
-                "price_formatted": "649 Kč"
+                "price_formatted": "649 CZK"
               },
               {
                 "id": 56679027212612,
                 "title": "M",
                 "available": false,
-                "price_formatted": "649 Kč"
+                "price_formatted": "649 CZK"
               },
               {
                 "id": 56679027245380,
                 "title": "L",
                 "available": false,
-                "price_formatted": "649 Kč"
+                "price_formatted": "649 CZK"
               },
               {
                 "id": 56679027278148,
                 "title": "XL",
                 "available": false,
-                "price_formatted": "649 Kč"
+                "price_formatted": "649 CZK"
               }
             ]
           },
@@ -551,7 +559,7 @@
             "title": "GOOD FRIENDS TO DO GOOD TEE",
             "url": "./index.html",
             "available": true,
-            "price_formatted": "1.290 Kč",
+            "price_formatted": "1.290 CZK",
             "description": "Cream oversized 260gsm organic cotton tee. Screen print front and back, distressed design elements.",
             "images": [
               "https://cdn.shopify.com/s/files/1/0555/8806/1508/files/frontcream_final.png?v=1731065352",
@@ -562,25 +570,25 @@
                 "id": 46376031977796,
                 "title": "S",
                 "available": true,
-                "price_formatted": "1.290 Kč"
+                "price_formatted": "1.290 CZK"
               },
               {
                 "id": 46376032010564,
                 "title": "M",
                 "available": true,
-                "price_formatted": "1.290 Kč"
+                "price_formatted": "1.290 CZK"
               },
               {
                 "id": 46376032043332,
                 "title": "L",
                 "available": true,
-                "price_formatted": "1.290 Kč"
+                "price_formatted": "1.290 CZK"
               },
               {
                 "id": 46376032076100,
                 "title": "XL",
                 "available": true,
-                "price_formatted": "1.290 Kč"
+                "price_formatted": "1.290 CZK"
               }
             ]
           },
@@ -590,7 +598,7 @@
             "title": "THIRD EYE HOODIE",
             "url": "./index.html",
             "available": true,
-            "price_formatted": "2.290 Kč",
+            "price_formatted": "2.290 CZK",
             "description": "Olive cropped 450gsm French terry hoodie. Corrosive spray, screen print, logo embroidery on the hood.",
             "images": [
               "https://cdn.shopify.com/s/files/1/0555/8806/1508/files/HOODIEFRONT1_2.png?v=1731066103"
@@ -600,31 +608,31 @@
                 "id": 44795502231876,
                 "title": "S",
                 "available": true,
-                "price_formatted": "2.290 Kč"
+                "price_formatted": "2.290 CZK"
               },
               {
                 "id": 44795502264644,
                 "title": "M",
                 "available": true,
-                "price_formatted": "2.290 Kč"
+                "price_formatted": "2.290 CZK"
               },
               {
                 "id": 44795502297412,
                 "title": "L",
                 "available": true,
-                "price_formatted": "2.290 Kč"
+                "price_formatted": "2.290 CZK"
               },
               {
                 "id": 44795502330180,
                 "title": "XL",
                 "available": true,
-                "price_formatted": "2.290 Kč"
+                "price_formatted": "2.290 CZK"
               }
             ]
           }
         ]
       }
     </script>
-    <script src="../assets/shop.js?v=mobile-slide" defer></script>
+    <script src="../assets/shop.js?v=hide-gallery" defer></script>
   </body>
 </html>

@@ -98,7 +98,9 @@
       "qty_up": {{ 'cart.qty_up' | t | json }},
       "qty_down": {{ 'cart.qty_down' | t | json }},
       "preview_checkout": {{ 'cart.preview_checkout' | t | json }},
-      "total": {{ 'cart.total' | t | json }}
+      "total": {{ 'cart.total' | t | json }},
+      "shipping_remain": {{ 'cart.shipping_remain' | t | json }},
+      "shipping_unlocked": {{ 'cart.shipping_unlocked' | t | json }}
     },
     "products": [
       {% for item in stage_collection.products %}
@@ -108,7 +110,7 @@
           "title": {{ item.title | json }},
           "url": {{ item.url | json }},
           "available": {{ item.available }},
-          "price_formatted": {{ item.price | money | strip_html | json }},
+          "price_formatted": {{ item.price | money_without_currency | append: ' CZK' | strip | json }},
           "description": {{ item.description | strip_html | json }},
           "description_html": {{ item.description | json }},
           "images": [
@@ -122,7 +124,7 @@
                 "id": {{ variant.id }},
                 "title": {{ variant.title | json }},
                 "available": {{ variant.available }},
-                "price_formatted": {{ variant.price | money | strip_html | json }}
+                "price_formatted": {{ variant.price | money_without_currency | append: ' CZK' | strip | json }}
               }{% unless forloop.last %},{% endunless %}
             {% endfor %}
           ]
