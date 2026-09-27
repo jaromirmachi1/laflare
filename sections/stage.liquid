@@ -17,6 +17,14 @@
   <p class="stage-loader" role="status">{{ 'general.accessibility.loading' | t }}</p>
   <header class="chrome chrome--top">
     {% render 'logo' %}
+    <button
+      type="button"
+      class="detail-back"
+      data-detail-back
+      hidden
+    >
+      {{ 'general.accessibility.back' | t }}
+    </button>
     {% render 'chrome-actions' %}
   </header>
 
@@ -61,7 +69,7 @@
       </div>
       <div class="price" data-price></div>
     </div>
-    <div class="detail-row">
+    <div class="detail-row detail-row--atc">
       <button type="button" class="more-btn" data-more>{{ 'product.more' | t }}</button>
       <button type="button" class="atc" data-atc>{{ 'product.add' | t }}</button>
     </div>
@@ -70,6 +78,12 @@
 </main>
 
 {% render 'info-overlay' %}
+
+<div class="sticky-atc" data-sticky-atc hidden>
+  <button type="button" class="atc sticky-atc__btn" data-atc-sticky>
+    {{ 'product.add' | t }}
+  </button>
+</div>
 
 <div class="wheel-dock">
   {% render 'ipod-menu' %}
@@ -100,7 +114,9 @@
       "preview_checkout": {{ 'cart.preview_checkout' | t | json }},
       "total": {{ 'cart.total' | t | json }},
       "shipping_remain": {{ 'cart.shipping_remain' | t | json }},
-      "shipping_unlocked": {{ 'cart.shipping_unlocked' | t | json }}
+      "shipping_unlocked": {{ 'cart.shipping_unlocked' | t | json }},
+      "back": {{ 'general.accessibility.back' | t | json }},
+      "menu": {{ 'general.accessibility.menu' | t | json }}
     },
     "products": [
       {% for item in stage_collection.products %}

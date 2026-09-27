@@ -25,7 +25,7 @@
         --font-geist-pixel: "Geist Pixel", sans-serif;
       }
     </style>
-    <link rel="stylesheet" href="../assets/shop.css?v=gallery-load" />
+    <link rel="stylesheet" href="../assets/shop.css?v=sticky-atc" />
   </head>
   <body class="template-index" data-preview="true">
     <a class="skip-link" href="#Main">Skip to content</a>
@@ -41,7 +41,7 @@
             height="237"
           />
         </a>
-      
+        <button type="button" class="detail-back" data-detail-back hidden>Back</button>
         <nav class="chrome-actions" aria-label="Account and cart">
           <a
             class="chrome-icon chrome-icon--account"
@@ -149,7 +149,7 @@
           </div>
           <div class="price" data-price></div>
         </div>
-        <div class="detail-row">
+        <div class="detail-row detail-row--atc">
           <button type="button" class="more-btn" data-more>More info</button>
           <button type="button" class="atc" data-atc>Add to cart</button>
         </div>
@@ -163,6 +163,10 @@
         <div class="info-panel__copy" data-info-copy></div>
         <button type="button" class="icon-btn" data-close-info>Close</button>
       </div>
+    </div>
+
+    <div class="sticky-atc" data-sticky-atc hidden>
+      <button type="button" class="atc sticky-atc__btn" data-atc-sticky>Add to cart</button>
     </div>
 
     <div class="wheel-dock">
@@ -473,7 +477,9 @@
           "preview_checkout": "Preview only. Upload this theme to Shopify to checkout.",
           "total": "Total",
           "shipping_remain": "Add {{ amount }} more for free shipping",
-          "shipping_unlocked": "You've unlocked free shipping"
+          "shipping_unlocked": "You've unlocked free shipping",
+          "back": "Back",
+          "menu": "Menu"
         },
         "products": [
           {
@@ -633,6 +639,6 @@
         ]
       }
     </script>
-    <script src="../assets/shop.js?v=gallery-load" defer></script>
+    <script src="../assets/shop.js?v=sticky-atc" defer></script>
   </body>
 </html>

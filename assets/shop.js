@@ -15,6 +15,9 @@
   const sizeSelect = document.querySelector("[data-size]");
   const priceEl = document.querySelector("[data-price]");
   const atcBtn = document.querySelector("[data-atc]");
+  const stickyAtcBtn = document.querySelector("[data-atc-sticky]");
+  const stickyAtc = document.querySelector("[data-sticky-atc]");
+  const detailBack = document.querySelector("[data-detail-back]");
   const moreBtn = document.querySelector("[data-more]");
   const copyEl = document.querySelector("[data-copy]");
   const infoOverlay = document.querySelector("[data-info]");
@@ -423,11 +426,18 @@
     }
   }
 
+  function syncMobileDetailChrome() {
+    const show = detail && isMobileInfo();
+    if (detailBack) detailBack.hidden = !show;
+    if (stickyAtc) stickyAtc.hidden = !show;
+  }
+
   function syncDetail() {
     const current = product();
     root.classList.toggle("is-detail", detail);
     root.classList.toggle("is-info", detail);
     syncWheelNavLabel();
+    syncMobileDetailChrome();
     if (!current || !detailBar) return;
     const html = current.description_html || current.description || "";
     if (copyEl) {
@@ -473,11 +483,14 @@
       priceEl.textContent = stripMoneyHtml(
         variant?.price_formatted || current?.price_formatted || "",
       );
-    if (!atcBtn) return;
-    atcBtn.disabled = !available;
-    atcBtn.textContent = available
+    const label = available
       ? i18n.add || "Add to cart"
       : i18n.sold_out || "Sold out";
+    [atcBtn, stickyAtcBtn].forEach((btn) => {
+      if (!btn) return;
+      btn.disabled = !available;
+      btn.textContent = label;
+    });
   }
 
   function openDetail() {
@@ -1076,6 +1089,10 @@
 
   sizeSelect?.addEventListener("change", updateAtc);
   atcBtn?.addEventListener("click", addToCart);
+  stickyAtcBtn?.addEventListener("click", addToCart);
+  detailBack?.addEventListener("click", () => {
+    if (detail) closeDetail();
+  });
   moreBtn?.addEventListener("click", () => {
     copyOpen = !copyOpen;
     syncDetail();
@@ -1214,6 +1231,7 @@
 
   window.addEventListener("resize", () => {
     refreshUnit();
+    syncMobileDetailChrome();
     if (copyOpen) syncDetail();
     if (detail) setImageIndex(imageIndex, true);
     else setIndex(index, true);
