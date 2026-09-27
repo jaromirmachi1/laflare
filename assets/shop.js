@@ -363,7 +363,7 @@
         `${current.title} ${i + 1}/${imgs.length}`,
       );
       writePose(btn, 0, 1);
-      btn.style.opacity = i === 0 ? "1" : "0";
+      btn.style.opacity = "";
       if (i === 0) btn.classList.add("is-current");
       const img = document.createElement("img");
       img.src = /[?&]width=/.test(src)
@@ -372,8 +372,9 @@
       img.alt = current.title;
       img.width = 700;
       img.height = 700;
+      img.decoding = "async";
+      img.loading = "eager";
       if (i === 0) img.fetchPriority = "high";
-      else img.loading = "lazy";
       btn.appendChild(img);
       btn.addEventListener("click", () => {
         if (ignoreClick) {
