@@ -25,7 +25,7 @@
         --font-geist-pixel: "Geist Pixel", sans-serif;
       }
     </style>
-    <link rel="stylesheet" href="../assets/shop.css?v=sticky-atc" />
+    <link rel="stylesheet" href="../assets/shop.css?v=sticky-back" />
   </head>
   <body class="template-index" data-preview="true">
     <a class="skip-link" href="#Main">Skip to content</a>
@@ -41,7 +41,6 @@
             height="237"
           />
         </a>
-        <button type="button" class="detail-back" data-detail-back hidden>Back</button>
         <nav class="chrome-actions" aria-label="Account and cart">
           <a
             class="chrome-icon chrome-icon--account"
@@ -166,6 +165,20 @@
     </div>
 
     <div class="sticky-atc" data-sticky-atc hidden>
+      <button
+        type="button"
+        class="sticky-atc__back"
+        data-detail-back
+        aria-label="Back"
+      >
+        <img
+          src="../assets/back-btn.png"
+          alt=""
+          width="66"
+          height="66"
+          decoding="async"
+        />
+      </button>
       <button type="button" class="atc sticky-atc__btn" data-atc-sticky>Add to cart</button>
     </div>
 
@@ -639,6 +652,6 @@
         ]
       }
     </script>
-    <script src="../assets/shop.js?v=sticky-atc" defer></script>
+    <script src="../assets/shop.js?v=sticky-back" defer></script>
   </body>
 </html>

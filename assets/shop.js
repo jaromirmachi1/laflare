@@ -428,7 +428,6 @@
 
   function syncMobileDetailChrome() {
     const show = detail && isMobileInfo();
-    if (detailBack) detailBack.hidden = !show;
     if (stickyAtc) stickyAtc.hidden = !show;
   }
 

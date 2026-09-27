@@ -17,14 +17,6 @@
   <p class="stage-loader" role="status">{{ 'general.accessibility.loading' | t }}</p>
   <header class="chrome chrome--top">
     {% render 'logo' %}
-    <button
-      type="button"
-      class="detail-back"
-      data-detail-back
-      hidden
-    >
-      {{ 'general.accessibility.back' | t }}
-    </button>
     {% render 'chrome-actions' %}
   </header>
 
@@ -80,6 +72,20 @@
 {% render 'info-overlay' %}
 
 <div class="sticky-atc" data-sticky-atc hidden>
+  <button
+    type="button"
+    class="sticky-atc__back"
+    data-detail-back
+    aria-label="{{ 'general.accessibility.back' | t }}"
+  >
+    <img
+      src="{{ 'back-btn.png' | asset_url }}"
+      alt=""
+      width="66"
+      height="66"
+      decoding="async"
+    />
+  </button>
   <button type="button" class="atc sticky-atc__btn" data-atc-sticky>
     {{ 'product.add' | t }}
   </button>
