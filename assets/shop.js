@@ -260,17 +260,19 @@
     const max = list.length;
     if (!max) return;
     if (copyOpen && detail && list === galleryItems) {
-      list.forEach((el, i) => {
-        cancelMove(el);
-        el.dataset.offset = "0";
-        el.style.zIndex = "";
-        el.style.willChange = "";
-        writePose(el, 0, 1);
-        el.classList.toggle("is-current", i === 0);
-        el.tabIndex = 0;
-        el.setAttribute("aria-hidden", "false");
-      });
-      return;
+      if (!isMobileInfo()) {
+        list.forEach((el, i) => {
+          cancelMove(el);
+          el.dataset.offset = "0";
+          el.style.zIndex = "";
+          el.style.willChange = "";
+          writePose(el, 0, 1);
+          el.classList.toggle("is-current", i === 0);
+          el.tabIndex = 0;
+          el.setAttribute("aria-hidden", "false");
+        });
+        return;
+      }
     }
     list.forEach((el, i) => {
       const offset = loopOffset(i, center, max);
@@ -900,7 +902,10 @@
       return;
     }
     if (legalsOverlay?.classList.contains("is-open")) return scrollLegals(-1);
-    if (root.classList.contains("is-info")) return scrollInfo(-1);
+    if (root.classList.contains("is-info")) {
+      if (isMobileInfo()) return step(-1);
+      return scrollInfo(-1);
+    }
     step(-1);
   });
   document.querySelector("[data-next]")?.addEventListener("click", () => {
@@ -910,7 +915,10 @@
       return;
     }
     if (legalsOverlay?.classList.contains("is-open")) return scrollLegals(1);
-    if (root.classList.contains("is-info")) return scrollInfo(1);
+    if (root.classList.contains("is-info")) {
+      if (isMobileInfo()) return step(1);
+      return scrollInfo(1);
+    }
     step(1);
   });
   document.querySelector("[data-down]")?.addEventListener("click", () => {
@@ -1070,7 +1078,7 @@
   );
   track?.addEventListener("pointerdown", (event) => {
     if (event.button && event.button !== 0) return;
-    if (root.classList.contains("is-info")) return;
+    if (root.classList.contains("is-info") && !isMobileInfo()) return;
     if (detail && productImages().length < 2) return;
     dragArmed = true;
     dragging = false;
