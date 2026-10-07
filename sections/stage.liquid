@@ -5,6 +5,11 @@
   elsif stage_collection == blank
     assign stage_collection = collections.all
   endif
+  if request.page_type == 'index'
+    assign stage_products = stage_collection.products | sort: 'published_at' | reverse
+  else
+    assign stage_products = stage_collection.products
+  endif
   assign initial_handle = ''
   assign open_detail = false
   if request.page_type == 'product'
@@ -29,7 +34,7 @@
       {% if stage_collection.products_count == 0 %}
         <p class="empty">{{ 'cart.empty' | t }}</p>
       {% endif %}
-      {% for item in stage_collection.products %}
+      {% for item in stage_products %}
         <button
           type="button"
           class="cover-item{% if forloop.first %} is-current{% endif %}"
@@ -129,7 +134,7 @@
       "menu": {{ 'general.accessibility.menu' | t | json }}
     },
     "products": [
-      {% for item in stage_collection.products %}
+      {% for item in stage_products %}
         {
           "id": {{ item.id }},
           "handle": {{ item.handle | json }},
@@ -188,7 +193,7 @@
       "type": "collection",
       "id": "collection",
       "label": "Collection",
-      "info": "Leave empty to use all products."
+      "info": "Leave empty to use all products. On the homepage, products are sorted newest first by publish date."
     }
   ],
   "presets": [{ "name": "Stage" }]
