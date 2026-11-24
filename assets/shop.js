@@ -272,6 +272,9 @@
   );
   if (index < 0) index = 0;
   let detail = Boolean(data.openDetail);
+  const startedAsProduct = Boolean(data.openDetail);
+  let detailHistoryPushed = false;
+  let ignoreDetailPop = false;
   let imageIndex = 0;
   let galleryItems = [];
   let copyOpen = false;
@@ -584,7 +587,11 @@
     if (titleEl) titleEl.textContent = current ? current.title : "";
     syncDetail();
     if (detail && current && !isPreview) {
-      history.replaceState(null, "", current.url);
+      history.replaceState(
+        { laflareDetail: true },
+        "",
+        current.url,
+      );
     }
   }
 
@@ -765,11 +772,33 @@
     buildGallery();
     syncDetail();
     if (!isPreview && current) {
-      history.replaceState(null, "", current.url);
+      if (startedAsProduct) {
+        history.replaceState({ laflareDetail: true }, "", current.url);
+      } else {
+        history.pushState({ laflareDetail: true }, "", current.url);
+        detailHistoryPushed = true;
+      }
     }
   }
 
-  function closeDetail() {
+  function restoreChrome() {
+    root.classList.add("is-stage-in");
+    [".logo", ".chrome-actions", ".wheel-dock"].forEach((sel) => {
+      document.querySelectorAll(sel).forEach((el) => {
+        el.style.opacity = "";
+        el.style.transform = "";
+        el.style.pointerEvents = "";
+      });
+    });
+  }
+
+  function closeDetail(opts = {}) {
+    const fromPop = Boolean(opts.fromPop);
+    // Real product pages have no grid toggle — go home fully.
+    if (!isPreview && startedAsProduct) {
+      window.location.assign(data.shopUrl || "/");
+      return;
+    }
     detail = false;
     copyOpen = false;
     stepToken += 1;
@@ -778,7 +807,19 @@
     refreshUnit();
     setIndex(index);
     syncDetail();
-    if (!isPreview) history.replaceState(null, "", data.shopUrl || "/");
+    restoreChrome();
+    if (!isPreview && !fromPop) {
+      if (detailHistoryPushed && history.state?.laflareDetail) {
+        detailHistoryPushed = false;
+        ignoreDetailPop = true;
+        history.back();
+      } else {
+        detailHistoryPushed = false;
+        history.replaceState(null, "", data.shopUrl || "/");
+      }
+    } else if (fromPop) {
+      detailHistoryPushed = false;
+    }
   }
 
   function step(delta, instant) {
@@ -1738,6 +1779,14 @@
       dragX = 0;
       dragAxis = null;
     }
+  });
+
+  window.addEventListener("popstate", () => {
+    if (ignoreDetailPop) {
+      ignoreDetailPop = false;
+      return;
+    }
+    if (detail) closeDetail({ fromPop: true });
   });
 
   window.addEventListener("keydown", (event) => {

@@ -553,20 +553,27 @@ body.is-stage-in:not(.is-detail) .product-title {
 
 body.template-index.is-stage-in .logo {
   animation: chrome-in 560ms var(--ease-out) both;
+  opacity: 1;
+  pointer-events: auto;
 }
 
 body.template-index.is-stage-in .chrome-actions {
   animation: chrome-in 560ms var(--ease-out) 70ms both;
+  opacity: 1;
+  pointer-events: auto;
 }
 
 body.template-index.is-stage-in .wheel-dock {
   animation: wheel-dock-in 680ms var(--ease-move) 110ms both;
+  opacity: 1;
+  pointer-events: auto;
 }
 
 body.template-index.is-stage-in.is-wheel-held .wheel-dock {
   animation: none;
   opacity: 1;
   transform: translateX(-50%);
+  pointer-events: auto;
 }
 
 @keyframes stage-title {
@@ -2542,11 +2549,7 @@ body.is-grid .grid-view {
 }
 
 .grid-card__quick {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 6px;
-  margin-top: 10px;
+  display: none;
 }
 
 .grid-card__size {
