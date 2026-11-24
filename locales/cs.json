@@ -30,7 +30,12 @@
       "loading": "Načítání",
       "enter": "Enter",
       "grid_view": "Mřížka",
-      "flow_view": "Coverflow"
+      "flow_view": "Coverflow",
+      "filter_all": "Vše",
+      "filter_category": "Kategorie",
+      "filter_color": "Barva",
+      "filter_size": "Velikost",
+      "filter_empty": "Žádné kousky neodpovídají filtrům"
     }
   },
   "about": {

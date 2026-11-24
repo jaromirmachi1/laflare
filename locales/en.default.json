@@ -30,7 +30,12 @@
       "loading": "Loading",
       "enter": "Enter",
       "grid_view": "Grid view",
-      "flow_view": "Coverflow view"
+      "flow_view": "Coverflow view",
+      "filter_all": "All",
+      "filter_category": "Category",
+      "filter_color": "Color",
+      "filter_size": "Size",
+      "filter_empty": "No pieces match these filters"
     }
   },
   "about": {

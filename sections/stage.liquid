@@ -73,10 +73,64 @@
   </section>
 
   {%- if show_view_toggle -%}
-    <section class="grid-view" data-grid aria-label="{{ shop.name }}">
+    <section
+      class="grid-view"
+      data-grid
+      aria-label="{{ shop.name }}"
+      data-label-all="{{ 'general.accessibility.filter_all' | t | escape }}"
+      data-label-category="{{ 'general.accessibility.filter_category' | t | escape }}"
+      data-label-color="{{ 'general.accessibility.filter_color' | t | escape }}"
+      data-label-size="{{ 'general.accessibility.filter_size' | t | escape }}"
+      data-label-empty="{{ 'general.accessibility.filter_empty' | t | escape }}"
+    >
+      <div class="grid-filters" data-grid-filters hidden></div>
       <ul class="grid-view__list" role="list">
         {%- for item in stage_products -%}
-          <li class="grid-card{% unless item.available %} is-sold{% endunless %}">
+          {%- liquid
+            assign filter_type = item.product_type | strip
+            if filter_type == blank
+              assign title_up = item.title | upcase
+              if title_up contains 'HOODIE'
+                assign filter_type = 'Hoodies'
+              elsif title_up contains 'ZIP'
+                assign filter_type = 'Zip'
+              elsif title_up contains 'TEE' or title_up contains 'T-SHIRT' or title_up contains 'TRIKO'
+                assign filter_type = 'T-Shirts'
+              else
+                assign filter_type = 'Other'
+              endif
+            endif
+            assign filter_sizes = ''
+            assign filter_colors = ''
+            for option in item.options_with_values
+              assign oname = option.name | downcase
+              if oname contains 'size' or oname contains 'velikost'
+                for value in option.values
+                  if filter_sizes == blank
+                    assign filter_sizes = value
+                  else
+                    assign filter_sizes = filter_sizes | append: '|' | append: value
+                  endif
+                endfor
+              endif
+              if oname contains 'color' or oname contains 'colour' or oname contains 'barva'
+                for value in option.values
+                  if filter_colors == blank
+                    assign filter_colors = value
+                  else
+                    assign filter_colors = filter_colors | append: '|' | append: value
+                  endif
+                endfor
+              endif
+            endfor
+          -%}
+          <li
+            class="grid-card{% unless item.available %} is-sold{% endunless %}"
+            data-grid-card
+            data-type="{{ filter_type | escape }}"
+            data-sizes="{{ filter_sizes | escape }}"
+            data-colors="{{ filter_colors | escape }}"
+          >
             <a class="grid-card__link" href="{{ item.url }}">
               <span class="grid-card__media">
                 {%- if item.featured_image -%}
@@ -84,7 +138,7 @@
                     class="grid-card__img"
                     src="{{ item.featured_image | image_url: width: 900 }}"
                     srcset="{{ item.featured_image | image_url: width: 450 }} 450w, {{ item.featured_image | image_url: width: 900 }} 900w"
-                    sizes="(min-width: 768px) 30vw, 48vw"
+                    sizes="(min-width: 1100px) 22vw, (min-width: 768px) 30vw, 48vw"
                     alt="{{ item.featured_image.alt | default: item.title | escape }}"
                     width="900"
                     height="1125"
@@ -116,6 +170,7 @@
           </li>
         {%- endfor -%}
       </ul>
+      <p class="grid-view__empty" data-grid-empty hidden>{{ 'general.accessibility.filter_empty' | t }}</p>
     </section>
   {%- endif -%}
 
