@@ -1185,20 +1185,50 @@
     );
   }
 
-  function upsellLines(remainMajor) {
-    if (remainMajor > 0) {
-      return [
-        i18n.upsell_ship_1,
-        i18n.upsell_ship_2,
-        i18n.upsell_ship_3,
-        i18n.upsell_ship_4,
+  function fillTemplate(template, vars) {
+    return Object.entries(vars).reduce(
+      (text, [key, value]) => text.split(`{{ ${key} }}`).join(String(value)),
+      String(template || ""),
+    );
+  }
+
+  function coversGap(price, remainMajor) {
+    return price > 0 && price + 0.01 >= remainMajor;
+  }
+
+  function upsellCopy(remainMajor, picks) {
+    if (remainMajor <= 0) {
+      const lines = [
+        i18n.upsell_more_1,
+        i18n.upsell_more_2,
+        i18n.upsell_more_3,
       ].filter(Boolean);
+      const seed = Number(picks[0]?.id) || 0;
+      return lines.length
+        ? lines[seed % lines.length]
+        : "Complete the look with a tee";
     }
-    return [
-      i18n.upsell_more_1,
-      i18n.upsell_more_2,
-      i18n.upsell_more_3,
-    ].filter(Boolean);
+
+    const prices = picks
+      .map((item) => productMajorPrice(item))
+      .filter((price) => price > 0);
+    if (!prices.length) return "";
+
+    if (prices.some((price) => coversGap(price, remainMajor))) {
+      return i18n.upsell_ship_one || "One more tee unlocks free shipping";
+    }
+
+    const sum = prices.reduce((total, price) => total + price, 0);
+    if (picks.length >= 2 && coversGap(sum, remainMajor)) {
+      return i18n.upsell_ship_two || "Two tees unlock free shipping";
+    }
+
+    const unit = Math.min(...prices);
+    const count = Math.max(2, Math.ceil(remainMajor / unit));
+    return fillTemplate(
+      i18n.upsell_ship_count || "Add {{ count }} tees to unlock free shipping",
+      { count },
+    );
   }
 
   function pickCartUpsells(cart, remainMajor) {
@@ -1212,31 +1242,39 @@
     if (!available.length) return [];
 
     const tees = available.filter(isTeeProduct);
-    // Free-shipping fill: tees first. Unlocked: still prefer tees.
     const pool = tees.length ? tees : available;
-    const ranked = pool.map((item) => ({
-      item,
-      price: productMajorPrice(item),
-      tee: isTeeProduct(item),
-    }));
+    const ranked = pool
+      .map((item) => ({
+        item,
+        price: productMajorPrice(item),
+        tee: isTeeProduct(item),
+      }))
+      .filter((entry) => entry.price > 0);
 
-    let ordered = ranked;
-    if (remainMajor > 0) {
-      const closing = ranked
-        .filter((entry) => entry.price >= remainMajor)
-        .sort((a, b) => a.price - b.price || Number(b.tee) - Number(a.tee));
-      const under = ranked
-        .filter((entry) => entry.price < remainMajor)
-        .sort((a, b) => b.price - a.price || Number(b.tee) - Number(a.tee));
-      ordered = closing.concat(under);
-    } else {
-      ordered = ranked.sort(
-        (a, b) => Number(b.tee) - Number(a.tee) || a.price - b.price,
-      );
+    if (!ranked.length) return [];
+
+    if (remainMajor <= 0) {
+      return ranked
+        .sort((a, b) => Number(b.tee) - Number(a.tee) || a.price - b.price)
+        .slice(0, 1)
+        .map((entry) => entry.item);
     }
 
-    const limit = remainMajor > 0 ? 2 : 1;
-    return ordered.slice(0, limit).map((entry) => entry.item);
+    const closing = ranked
+      .filter((entry) => coversGap(entry.price, remainMajor))
+      .sort((a, b) => a.price - b.price);
+    if (closing.length) return [closing[0].item];
+
+    const byPrice = ranked.slice().sort((a, b) => a.price - b.price);
+    for (let i = 0; i < byPrice.length; i += 1) {
+      for (let j = i + 1; j < byPrice.length; j += 1) {
+        if (coversGap(byPrice[i].price + byPrice[j].price, remainMajor)) {
+          return [byPrice[i].item, byPrice[j].item];
+        }
+      }
+    }
+
+    return [byPrice[0].item];
   }
 
   function bindUpsellCard(card, pick) {
@@ -1285,15 +1323,8 @@
     }
 
     cartUpsell.hidden = false;
-    const lines = upsellLines(remainMajor);
-    if (cartUpsellLabel && lines.length) {
-      const seed = Number(picks[0].id) || 0;
-      cartUpsellLabel.textContent = lines[seed % lines.length];
-    } else if (cartUpsellLabel) {
-      cartUpsellLabel.textContent =
-        remainMajor > 0
-          ? "One more tee unlocks free shipping"
-          : "Complete the look with a tee";
+    if (cartUpsellLabel) {
+      cartUpsellLabel.textContent = upsellCopy(remainMajor, picks);
     }
 
     cartUpsellList.innerHTML = "";

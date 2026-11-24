@@ -27,6 +27,10 @@
     <div class="cart-panel__body">
       <p class="cart-empty" data-cart-empty>{{ 'cart.empty' | t }}</p>
       <div class="cart-lines" data-cart-lines></div>
+      <div class="cart-upsell" data-cart-upsell hidden>
+        <p class="cart-upsell__label" data-cart-upsell-label></p>
+        <div class="cart-upsell__list" data-cart-upsell-list></div>
+      </div>
     </div>
     <div class="cart-panel__foot">
       <div class="cart-ship" data-cart-ship hidden>
@@ -34,10 +38,6 @@
         <div class="cart-ship__track" aria-hidden="true">
           <span class="cart-ship__fill" data-cart-ship-fill></span>
         </div>
-      </div>
-      <div class="cart-upsell" data-cart-upsell hidden>
-        <p class="cart-upsell__label" data-cart-upsell-label></p>
-        <div class="cart-upsell__list" data-cart-upsell-list></div>
       </div>
       <div class="cart-total" data-cart-total hidden>
         <span class="cart-total__label">{{ 'cart.total' | t }}</span>

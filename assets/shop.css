@@ -1334,14 +1334,16 @@ body.is-info .product-copy.is-open {
 }
 
 .overlay--cart .cart-panel {
-  width: min(420px, 92vw);
-  height: 100%;
-  max-height: none;
+  width: min(420px, 100vw);
+  height: 100dvh;
+  max-height: 100dvh;
+  min-height: 0;
   margin: 0;
-  padding: 20px 24px 28px;
-  display: grid;
-  grid-template-rows: auto 1fr auto;
+  padding: 16px 20px max(16px, env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
   gap: 14px;
+  overflow: hidden;
   background: var(--stage);
   box-shadow: -18px 0 40px rgba(17, 17, 17, 0.12);
   transform: translateX(24px);
@@ -1354,6 +1356,7 @@ body.is-info .product-copy.is-open {
 
 .cart-panel__head {
   display: grid;
+  flex: 0 0 auto;
   grid-template-columns: 1fr auto;
   grid-template-rows: auto auto;
   align-items: center;
@@ -1413,15 +1416,20 @@ body.is-info .product-copy.is-open {
 
 .cart-panel__body {
   display: grid;
+  flex: 1 1 auto;
   gap: 18px;
   align-content: start;
   min-height: 0;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
   overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
 }
 
 .cart-panel__foot {
   display: grid;
+  flex: 0 0 auto;
   gap: 12px;
   padding-top: 8px;
 }
@@ -2288,7 +2296,9 @@ body.is-grid .chrome-icon--view .chrome-icon__flow {
 body.is-grid {
   --wheel-size: 128px;
   --wheel-offset: 18px;
+  --header-h: calc(72px + env(safe-area-inset-top, 0px));
   overflow: auto;
+  background: var(--stage);
 }
 
 body.is-grid .stage {
@@ -2311,7 +2321,41 @@ body.is-grid .stage > [data-product-title] {
 }
 
 body.is-grid .chrome--top {
+  height: var(--header-h);
   background: var(--stage);
+}
+
+body.is-grid .chrome--top::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  height: 100vh;
+  background: var(--stage);
+  pointer-events: none;
+}
+
+body.is-grid .logo {
+  top: calc(16px + env(safe-area-inset-top, 0px));
+}
+
+body.is-grid .chrome-actions {
+  top: calc(10px + env(safe-area-inset-top, 0px));
+}
+
+@media (min-width: 900px) {
+  body.is-grid {
+    --header-h: calc(80px + env(safe-area-inset-top, 0px));
+  }
+
+  body.is-grid .logo {
+    top: calc(18px + env(safe-area-inset-top, 0px));
+  }
+
+  body.is-grid .chrome-actions {
+    top: calc(12px + env(safe-area-inset-top, 0px));
+  }
 }
 
 body.is-grid .grid-view {
