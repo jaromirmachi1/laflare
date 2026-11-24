@@ -1,0 +1,95 @@
+/* LAFLARECLUB — password page: the intro gate with a password field */
+
+.lock-form {
+  position: fixed;
+  z-index: calc(var(--z-intro) + 2);
+  left: 50%;
+  bottom: max(9vh, 56px);
+  width: min(calc(100vw - 32px), 380px);
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+.lock-form form {
+  margin: 0;
+}
+
+.lock-form__pill {
+  display: flex;
+  gap: 6px;
+  padding: 6px;
+  border: 1px solid rgb(255 255 255 / 0.16);
+  border-radius: 999px;
+  background: rgb(10 10 10 / 0.62);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 16px 36px rgb(0 0 0 / 0.48);
+  transition: border-color var(--duration) var(--ease-out);
+}
+
+.lock-form__pill:focus-within {
+  border-color: rgb(255 255 255 / 0.4);
+}
+
+.lock-form__input {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 44px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--white);
+  font: 500 14px/1 var(--font-geist);
+  letter-spacing: 0.02em;
+  outline: none;
+}
+
+.lock-form__input::placeholder {
+  color: rgb(255 255 255 / 0.5);
+}
+
+.lock-form .atc {
+  flex: 0 0 auto;
+  background: var(--white);
+  color: var(--black);
+}
+
+.lock-form__error {
+  margin: 12px 0 0;
+  font-family: var(--font-geist-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgb(10 10 10 / 0.72);
+  color: #ff5a5a;
+}
+
+.lock-form__pill.is-shake {
+  animation: lock-shake 420ms var(--ease-out);
+}
+
+@keyframes lock-shake {
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(7px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(3px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lock-form__pill.is-shake {
+    animation: none;
+  }
+}
+
+.lock-form__label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
