@@ -1,45 +1,48 @@
 {%- liquid
-  assign intro_count = 30
+  assign intro_count = 35
 -%}
 <div class="intro" data-intro data-enter-label="{{ 'general.accessibility.enter' | t | escape }}">
   <div class="intro__split">
     <div class="intro__pane">
       <div class="intro__track" data-intro-track="left">
-        {%- for pass in (1..2) -%}
-          {%- for i in (1..intro_count) -%}
-            {%- assign n = i | prepend: '00' | slice: -2, 2 -%}
-            {%- assign file = 'intro-' | append: n | append: '.jpg' -%}
-            <figure class="intro__shot">
-              <img
-                src="{{ file | asset_url }}"
-                alt=""
-                width="1800"
-                height="1800"
-                {% if forloop.parentloop.first and forloop.first %}fetchpriority="high"{% else %}loading="eager"{% endif %}
-                decoding="async"
-              >
-            </figure>
-          {%- endfor -%}
+        {%- for i in (1..intro_count) -%}
+          {%- assign n = i | prepend: '00' | slice: -2, 2 -%}
+          {%- assign file = 'intro-' | append: n | append: '.jpg' -%}
+          <figure class="intro__shot">
+            <img
+              src="{{ file | asset_url }}"
+              alt=""
+              width="1024"
+              height="1280"
+              {% if forloop.first %}
+                fetchpriority="high"
+                loading="eager"
+              {% elsif forloop.index <= 3 %}
+                loading="eager"
+              {% else %}
+                loading="lazy"
+              {% endif %}
+              decoding="async"
+            >
+          </figure>
         {%- endfor -%}
       </div>
     </div>
     <div class="intro__pane">
       <div class="intro__track" data-intro-track="right">
-        {%- for pass in (1..2) -%}
-          {%- for i in (1..intro_count) -%}
-            {%- assign n = intro_count | minus: i | plus: 1 | prepend: '00' | slice: -2, 2 -%}
-            {%- assign file = 'intro-' | append: n | append: '.jpg' -%}
-            <figure class="intro__shot">
-              <img
-                src="{{ file | asset_url }}"
-                alt=""
-                width="1800"
-                height="1800"
-                loading="eager"
-                decoding="async"
-              >
-            </figure>
-          {%- endfor -%}
+        {%- for i in (1..intro_count) -%}
+          {%- assign n = intro_count | minus: i | plus: 1 | prepend: '00' | slice: -2, 2 -%}
+          {%- assign file = 'intro-' | append: n | append: '.jpg' -%}
+          <figure class="intro__shot">
+            <img
+              src="{{ file | asset_url }}"
+              alt=""
+              width="1024"
+              height="1280"
+              {% if forloop.index <= 2 %}loading="eager"{% else %}loading="lazy"{% endif %}
+              decoding="async"
+            >
+          </figure>
         {%- endfor -%}
       </div>
     </div>

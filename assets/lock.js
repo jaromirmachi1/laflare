@@ -5,8 +5,8 @@
   const left = intro.querySelector('[data-intro-track="left"]');
   const right = intro.querySelector('[data-intro-track="right"]');
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const SLIDE_MS = 1600;
-  const HOLD_MS = 1600;
+  const SLIDE_MS = 1100;
+  const HOLD_MS = 900;
   let step = 0;
 
   const shuffle = (list) => {
@@ -20,18 +20,36 @@
 
   const srcs = (() => {
     const imgs = [...(left?.querySelectorAll(".intro__shot img") || [])];
-    return imgs.slice(0, Math.max(1, Math.floor(imgs.length / 2))).map((img) => img.currentSrc || img.src);
+    const seen = new Set();
+    const out = [];
+    imgs.forEach((img) => {
+      const src = img.currentSrc || img.src;
+      if (!src || seen.has(src)) return;
+      seen.add(src);
+      out.push(src);
+    });
+    return out;
   })();
 
   const fill = (track, list) => {
     if (!track || !list.length) return;
     const frag = document.createDocumentFragment();
+    let slot = 0;
     for (let pass = 0; pass < 2; pass += 1) {
       list.forEach((src) => {
         const fig = document.createElement("figure");
         fig.className = "intro__shot";
         const img = document.createElement("img");
-        Object.assign(img, { src, alt: "", width: 1800, height: 1800, decoding: "async", loading: "eager" });
+        Object.assign(img, {
+          src,
+          alt: "",
+          width: 1024,
+          height: 1280,
+          decoding: "async",
+          loading: slot < 3 ? "eager" : "lazy",
+        });
+        if (slot === 0) img.fetchPriority = "high";
+        slot += 1;
         fig.appendChild(img);
         frag.appendChild(fig);
       });

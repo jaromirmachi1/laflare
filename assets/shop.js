@@ -18,8 +18,8 @@
     const left = intro.querySelector('[data-intro-track="left"]');
     const right = intro.querySelector('[data-intro-track="right"]');
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const SLIDE_MS = 1600;
-    const HOLD_MS = 1600;
+    const SLIDE_MS = 1100;
+    const HOLD_MS = 900;
     let step = 0;
     let raf = 0;
     let holdTimer = 0;
@@ -37,13 +37,21 @@
 
     function shotSrcs(track) {
       const imgs = [...(track?.querySelectorAll(".intro__shot img") || [])];
-      const half = Math.max(1, Math.floor(imgs.length / 2));
-      return imgs.slice(0, half).map((img) => img.currentSrc || img.src);
+      const seen = new Set();
+      const out = [];
+      imgs.forEach((img) => {
+        const src = img.currentSrc || img.src;
+        if (!src || seen.has(src)) return;
+        seen.add(src);
+        out.push(src);
+      });
+      return out;
     }
 
     function fillTrack(track, srcs) {
       if (!track || !srcs.length) return;
       const frag = document.createDocumentFragment();
+      let slot = 0;
       for (let pass = 0; pass < 2; pass += 1) {
         srcs.forEach((src) => {
           const fig = document.createElement("figure");
@@ -51,10 +59,12 @@
           const img = document.createElement("img");
           img.src = src;
           img.alt = "";
-          img.width = 1800;
-          img.height = 1800;
+          img.width = 1024;
+          img.height = 1280;
           img.decoding = "async";
-          img.loading = "eager";
+          img.loading = slot < 3 ? "eager" : "lazy";
+          if (slot === 0) img.fetchPriority = "high";
+          slot += 1;
           fig.appendChild(img);
           frag.appendChild(fig);
         });
