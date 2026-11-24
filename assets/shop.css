@@ -2159,10 +2159,26 @@ body.is-grid .stage {
 }
 
 body.is-grid .coverflow,
-body.is-grid .product-title,
 body.is-grid .detail-bar,
 body.is-grid .sticky-atc {
   display: none;
+}
+
+/* Coverflow title must never leak into the shop-all grid. */
+body.is-grid .product-title,
+body.is-grid [data-product-title] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: -1px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  border: 0 !important;
 }
 
 body.is-grid .chrome--top {

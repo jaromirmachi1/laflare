@@ -14,11 +14,17 @@
     }
   };
 
+  const titleEl = document.querySelector("[data-product-title]");
+
   const sync = () => {
     const on = body.classList.contains("is-grid");
     btn.setAttribute("aria-pressed", String(on));
     btn.setAttribute("aria-label", on ? btn.dataset.labelFlow : btn.dataset.labelGrid);
     grid.toggleAttribute("inert", !on);
+    if (titleEl) {
+      titleEl.hidden = on;
+      titleEl.setAttribute("aria-hidden", on ? "true" : "false");
+    }
   };
 
   btn.addEventListener("click", () => {
