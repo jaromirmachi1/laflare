@@ -76,22 +76,18 @@
     <section class="grid-view" data-grid aria-label="{{ shop.name }}">
       <ul class="grid-view__list" role="list">
         {%- for item in stage_products -%}
-          {%- assign grid_n = forloop.index | prepend: '00' | slice: -2, 2 -%}
-          <li
-            class="grid-card{% unless item.available %} is-sold{% endunless %}{% if forloop.first %} is-feature{% endif %}"
-            style="--i: {{ forloop.index0 }}"
-          >
+          <li class="grid-card{% unless item.available %} is-sold{% endunless %}">
             <a class="grid-card__link" href="{{ item.url }}">
               <span class="grid-card__media">
                 {%- if item.featured_image -%}
                   <img
                     class="grid-card__img"
-                    src="{{ item.featured_image | image_url: width: 1200 }}"
-                    srcset="{{ item.featured_image | image_url: width: 600 }} 600w, {{ item.featured_image | image_url: width: 1200 }} 1200w"
-                    sizes="(min-width: 900px) 42vw, (min-width: 768px) 50vw, 92vw"
+                    src="{{ item.featured_image | image_url: width: 900 }}"
+                    srcset="{{ item.featured_image | image_url: width: 450 }} 450w, {{ item.featured_image | image_url: width: 900 }} 900w"
+                    sizes="(min-width: 768px) 30vw, 48vw"
                     alt="{{ item.featured_image.alt | default: item.title | escape }}"
-                    width="1200"
-                    height="1500"
+                    width="900"
+                    height="1125"
                     loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
                     decoding="async"
                     {% if forloop.first %}fetchpriority="high"{% endif %}
@@ -99,25 +95,22 @@
                   {%- if item.images.size > 1 -%}
                     <img
                       class="grid-card__img grid-card__img--alt"
-                      src="{{ item.images[1] | image_url: width: 1200 }}"
+                      src="{{ item.images[1] | image_url: width: 900 }}"
                       alt=""
-                      width="1200"
-                      height="1500"
+                      width="900"
+                      height="1125"
                       loading="lazy"
                       decoding="async"
                     >
                   {%- endif -%}
                 {%- endif -%}
                 {%- unless item.available -%}
-                  <span class="grid-card__stamp">{{ 'product.sold_out' | t }}</span>
+                  <span class="sold-pill">{{ 'product.sold_out' | t }}</span>
                 {%- endunless -%}
-                <span class="grid-card__meta">
-                  <span class="grid-card__index" aria-hidden="true">{{ grid_n }}</span>
-                  <span class="grid-card__copy">
-                    <span class="grid-card__title">{{ item.title }}</span>
-                    <span class="grid-card__price">{{ item.price | money_without_currency | append: ' CZK' }}</span>
-                  </span>
-                </span>
+              </span>
+              <span class="grid-card__meta">
+                <span class="grid-card__title">{{ item.title }}</span>
+                <span class="grid-card__price">{{ item.price | money_without_currency | append: ' CZK' }}</span>
               </span>
             </a>
           </li>
