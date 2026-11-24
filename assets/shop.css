@@ -1452,6 +1452,116 @@ body.is-info .product-copy.is-open {
   transition: width 280ms var(--ease-out);
 }
 
+.cart-upsell {
+  display: grid;
+  gap: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(17, 17, 17, 0.08);
+}
+
+.cart-upsell__label {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.35;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.cart-upsell__list {
+  display: grid;
+  gap: 10px;
+}
+
+.cart-upsell__card {
+  display: grid;
+  grid-template-columns: 56px 1fr auto;
+  gap: 10px;
+  align-items: center;
+}
+
+.cart-upsell__img {
+  width: 56px;
+  height: 70px;
+  object-fit: cover;
+  background: #f2f2f2;
+}
+
+.cart-upsell__info {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.cart-upsell__title {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1.25;
+}
+
+.cart-upsell__price {
+  margin: 0;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.cart-upsell__size {
+  display: grid;
+  gap: 2px;
+  margin-top: 2px;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.cart-upsell__size select {
+  width: 100%;
+  max-width: 120px;
+  margin: 0;
+  padding: 4px 0;
+  border: 0;
+  border-bottom: 1px solid rgba(17, 17, 17, 0.2);
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: var(--cursor-hover);
+}
+
+.cart-upsell__add {
+  align-self: stretch;
+  min-width: 64px;
+  margin: 0;
+  padding: 0 12px;
+  border: 0;
+  background: var(--ink);
+  color: var(--stage);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: var(--cursor-hover);
+  transition:
+    transform 160ms var(--ease-out),
+    opacity 160ms var(--ease-out);
+}
+
+.cart-upsell__add:active {
+  transform: scale(0.97);
+  opacity: 0.88;
+}
+
 .cart-total {
   display: flex;
   align-items: baseline;

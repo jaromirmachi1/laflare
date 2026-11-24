@@ -257,8 +257,14 @@
   const cartShip = document.querySelector("[data-cart-ship]");
   const cartShipMsg = document.querySelector("[data-cart-ship-msg]");
   const cartShipFill = document.querySelector("[data-cart-ship-fill]");
+  const cartUpsell = document.querySelector("[data-cart-upsell]");
+  const cartUpsellLabel = document.querySelector("[data-cart-upsell-label]");
+  const cartUpsellList = document.querySelector("[data-cart-upsell-list]");
   const checkoutBtn = document.querySelector("[data-checkout]");
-  const FREE_SHIPPING_CZK = 2000;
+  const FREE_SHIPPING = {
+    CZK: Number(data.freeShipping?.CZK) || 3000,
+    EUR: Number(data.freeShipping?.EUR) || 123,
+  };
 
   let index = Math.max(
     0,
@@ -303,17 +309,43 @@
     return `${Math.round(n).toLocaleString("cs-CZ")} CZK`;
   }
 
+  function cartCurrency(cart) {
+    const raw =
+      cart?.currency?.iso_code ||
+      cart?.currency ||
+      data.currency ||
+      "CZK";
+    return String(raw).toUpperCase();
+  }
+
+  function freeShippingThreshold(cart) {
+    const code = cartCurrency(cart);
+    return FREE_SHIPPING[code] || FREE_SHIPPING.CZK;
+  }
+
+  function formatMajor(amount, currency) {
+    const n = Math.round(Number(amount) || 0);
+    const code = String(currency || "CZK").toUpperCase();
+    if (code === "EUR") return `${n.toLocaleString("cs-CZ")} EUR`;
+    return `${n.toLocaleString("cs-CZ")} CZK`;
+  }
+
   function formatCrowns(crowns) {
-    return `${Math.round(Number(crowns) || 0).toLocaleString("cs-CZ")} CZK`;
+    return formatMajor(crowns, "CZK");
   }
 
   function crownsFromFormatted(value) {
     return Number(String(value || "").replace(/[^\d]/g, "")) || 0;
   }
 
+  function productMajorPrice(item) {
+    if (typeof item?.price === "number") return item.price / 100;
+    return crownsFromFormatted(item?.price_formatted);
+  }
+
   function cartTotalCrowns(cart) {
     if (typeof cart.total_price === "number") {
-      return Math.round(cart.total_price / 100);
+      return cart.total_price / 100;
     }
     return (cart.items || []).reduce((sum, line) => {
       const qty = Number(line.quantity) || 1;
@@ -1013,34 +1045,37 @@
     if (!cartLines) return;
     cartLines.innerHTML = "";
     const itemsList = cart.items || [];
-    if (cartEmpty) cartEmpty.hidden = itemsList.length > 0;
-    if (checkoutBtn) checkoutBtn.hidden = itemsList.length === 0;
-    if (cartTotal) cartTotal.hidden = itemsList.length === 0;
-    const crowns = cartTotalCrowns(cart);
-    if (cartTotalValue && itemsList.length > 0) {
-      cartTotalValue.textContent = formatCrowns(crowns);
+    const hasItems = itemsList.length > 0;
+    const currency = cartCurrency(cart);
+    const threshold = freeShippingThreshold(cart);
+    if (cartEmpty) cartEmpty.hidden = hasItems;
+    if (checkoutBtn) checkoutBtn.hidden = !hasItems;
+    if (cartTotal) cartTotal.hidden = !hasItems;
+    const totalMajor = cartTotalCrowns(cart);
+    if (cartTotalValue && hasItems) {
+      cartTotalValue.textContent = formatMajor(totalMajor, currency);
     }
     if (cartShip) {
-      const hasItems = itemsList.length > 0;
       cartShip.hidden = !hasItems;
-      cartShip.classList.toggle("is-unlocked", hasItems && crowns >= FREE_SHIPPING_CZK);
+      const unlocked = hasItems && totalMajor >= threshold;
+      cartShip.classList.toggle("is-unlocked", unlocked);
       if (hasItems && cartShipMsg) {
-        if (crowns >= FREE_SHIPPING_CZK) {
+        if (unlocked) {
           cartShipMsg.textContent =
             i18n.shipping_unlocked || "You unlocked free shipping";
         } else {
-          const remain = FREE_SHIPPING_CZK - crowns;
+          const remain = Math.max(0, threshold - totalMajor);
           const template =
             i18n.shipping_remain || "Add {{ amount }} more for free shipping";
           cartShipMsg.textContent = template.replace(
             "{{ amount }}",
-            formatCrowns(remain),
+            formatMajor(remain, currency),
           );
         }
       }
       if (cartShipFill) {
         const pct = hasItems
-          ? Math.min(100, Math.round((crowns / FREE_SHIPPING_CZK) * 100))
+          ? Math.min(100, Math.round((totalMajor / threshold) * 100))
           : 0;
         cartShipFill.style.width = `${pct}%`;
       }
@@ -1049,7 +1084,7 @@
       const qty = Number(line.quantity) || 1;
       const priceLabel = stripMoneyHtml(
         line.price_formatted ||
-          formatMoney((line.final_price || line.price || 0) / 100),
+          formatMajor((line.final_price || line.price || 0) / 100, currency),
       );
       const row = document.createElement("div");
       row.className = "cart-line";
@@ -1081,6 +1116,185 @@
       row.appendChild(remove);
       cartLines.appendChild(row);
     });
+    renderCartUpsell(cart, Math.max(0, threshold - totalMajor), currency);
+  }
+
+  function lineInProduct(line, product) {
+    const productId = String(product.id);
+    if (line.product_id != null && String(line.product_id) === productId) {
+      return true;
+    }
+    const variantIds = new Set(
+      (product.variants || []).map((variant) => String(variant.id)),
+    );
+    return (
+      variantIds.has(String(line.id)) ||
+      variantIds.has(String(line.variant_id))
+    );
+  }
+
+  function isTeeProduct(item) {
+    const type = String(item?.type || item?.product_type || "").toLowerCase();
+    const title = String(item?.title || "").toLowerCase();
+    const handle = String(item?.handle || "").toLowerCase();
+    return (
+      /t-?shirts?|tee|triko|tričk/.test(type) ||
+      /\btee\b|t-shirt|triko|tričk/.test(title) ||
+      /tee|t-shirt|triko/.test(handle)
+    );
+  }
+
+  function upsellLines(remainMajor) {
+    if (remainMajor > 0) {
+      return [
+        i18n.upsell_ship_1,
+        i18n.upsell_ship_2,
+        i18n.upsell_ship_3,
+        i18n.upsell_ship_4,
+      ].filter(Boolean);
+    }
+    return [
+      i18n.upsell_more_1,
+      i18n.upsell_more_2,
+      i18n.upsell_more_3,
+    ].filter(Boolean);
+  }
+
+  function pickCartUpsells(cart, remainMajor) {
+    const available = products.filter((item) => {
+      if (!item?.available) return false;
+      if ((cart.items || []).some((line) => lineInProduct(line, item))) {
+        return false;
+      }
+      return (item.variants || []).some((variant) => variant.available !== false);
+    });
+    if (!available.length) return [];
+
+    const tees = available.filter(isTeeProduct);
+    // Free-shipping fill: tees first. Unlocked: still prefer tees.
+    const pool = tees.length ? tees : available;
+    const ranked = pool.map((item) => ({
+      item,
+      price: productMajorPrice(item),
+      tee: isTeeProduct(item),
+    }));
+
+    let ordered = ranked;
+    if (remainMajor > 0) {
+      const closing = ranked
+        .filter((entry) => entry.price >= remainMajor)
+        .sort((a, b) => a.price - b.price || Number(b.tee) - Number(a.tee));
+      const under = ranked
+        .filter((entry) => entry.price < remainMajor)
+        .sort((a, b) => b.price - a.price || Number(b.tee) - Number(a.tee));
+      ordered = closing.concat(under);
+    } else {
+      ordered = ranked.sort(
+        (a, b) => Number(b.tee) - Number(a.tee) || a.price - b.price,
+      );
+    }
+
+    const limit = remainMajor > 0 ? 2 : 1;
+    return ordered.slice(0, limit).map((entry) => entry.item);
+  }
+
+  function bindUpsellCard(card, pick) {
+    const variants = (pick.variants || []).filter(
+      (variant) => variant.available !== false,
+    );
+    if (!variants.length) return;
+
+    const sizeEl = card.querySelector("[data-upsell-size]");
+    const priceElLocal = card.querySelector("[data-upsell-price]");
+    const image = pick.images?.[0] || "";
+
+    sizeEl?.addEventListener?.("change", () => {
+      if (!priceElLocal || sizeEl.tagName !== "SELECT") return;
+      const opt = sizeEl.selectedOptions?.[0];
+      if (opt?.dataset.price) {
+        priceElLocal.textContent = stripMoneyHtml(opt.dataset.price);
+      }
+    });
+
+    card.querySelector("[data-upsell-add]")?.addEventListener("click", () => {
+      const variantId =
+        sizeEl?.tagName === "SELECT"
+          ? sizeEl.value
+          : sizeEl?.value || variants[0].id;
+      const variant =
+        variants.find((entry) => String(entry.id) === String(variantId)) ||
+        variants[0];
+      addVariantToCart(variant, {
+        title: pick.title,
+        image,
+        price_formatted: variant.price_formatted || pick.price_formatted,
+        variantTitle: variant.title,
+      });
+    });
+  }
+
+  function renderCartUpsell(cart, remainMajor, currency) {
+    if (!cartUpsell || !cartUpsellList) return;
+    const hasItems = (cart.items || []).length > 0;
+    const picks = hasItems ? pickCartUpsells(cart, remainMajor) : [];
+    if (!picks.length) {
+      cartUpsell.hidden = true;
+      cartUpsellList.innerHTML = "";
+      return;
+    }
+
+    cartUpsell.hidden = false;
+    const lines = upsellLines(remainMajor);
+    if (cartUpsellLabel && lines.length) {
+      const seed = Number(picks[0].id) || 0;
+      cartUpsellLabel.textContent = lines[seed % lines.length];
+    } else if (cartUpsellLabel) {
+      cartUpsellLabel.textContent =
+        remainMajor > 0
+          ? "One more tee unlocks free shipping"
+          : "Complete the look with a tee";
+    }
+
+    cartUpsellList.innerHTML = "";
+    picks.forEach((pick) => {
+      const variants = (pick.variants || []).filter(
+        (variant) => variant.available !== false,
+      );
+      if (!variants.length) return;
+
+      const priceLabel = stripMoneyHtml(
+        pick.price_formatted || formatMajor(productMajorPrice(pick), currency),
+      );
+      const image = pick.images?.[0] || "";
+      const sizeOptions = variants
+        .map(
+          (variant, i) =>
+            `<option value="${variant.id}" data-price="${variant.price_formatted || priceLabel}"${i === 0 ? " selected" : ""}>${variant.title}</option>`,
+        )
+        .join("");
+
+      const card = document.createElement("div");
+      card.className = "cart-upsell__card";
+      card.innerHTML = `
+        <img class="cart-upsell__img" src="${image}" alt="">
+        <div class="cart-upsell__info">
+          <p class="cart-upsell__title">${pick.title}</p>
+          <p class="cart-upsell__price" data-upsell-price>${priceLabel}</p>
+          ${
+            variants.length > 1
+              ? `<label class="cart-upsell__size"><span>${i18n.size || "Size"}</span><select data-upsell-size>${sizeOptions}</select></label>`
+              : `<input type="hidden" data-upsell-size value="${variants[0].id}">`
+          }
+        </div>
+        <button type="button" class="cart-upsell__add" data-upsell-add>${i18n.upsell_add || "Add"}</button>
+      `;
+      bindUpsellCard(card, pick);
+      cartUpsellList.appendChild(card);
+    });
+
+    if (!cartUpsellList.children.length) {
+      cartUpsell.hidden = true;
+    }
   }
 
   async function changeLine(line, quantity) {
@@ -1097,6 +1311,14 @@
         (sum, item) => sum + item.quantity,
         0,
       );
+      cart.currency = cart.currency || data.currency || "CZK";
+      cart.total_price = (cart.items || []).reduce((sum, item) => {
+        const unit =
+          typeof item.price === "number"
+            ? item.price
+            : crownsFromFormatted(item.price_formatted) * 100;
+        return sum + unit * (Number(item.quantity) || 1);
+      }, 0);
       savePreviewCart(cart);
       renderCart();
       return;
@@ -1126,12 +1348,25 @@
       );
       if (existing) existing.quantity += 1;
       else {
+        const owner =
+          products.find((item) =>
+            (item.variants || []).some(
+              (entry) => String(entry.id) === String(variant.id),
+            ),
+          ) || null;
+        const unitCents =
+          typeof variant.price === "number"
+            ? variant.price
+            : crownsFromFormatted(price) * 100;
         cart.items.push({
           key: String(variant.id),
           id: variant.id,
+          variant_id: variant.id,
+          product_id: owner?.id,
           title: sizeLabel ? `${title} / ${sizeLabel}` : title,
           quantity: 1,
           image,
+          price: unitCents,
           price_formatted: price,
         });
       }
@@ -1139,6 +1374,14 @@
         (sum, item) => sum + item.quantity,
         0,
       );
+      cart.currency = cart.currency || data.currency || "CZK";
+      cart.total_price = (cart.items || []).reduce((sum, item) => {
+        const unit =
+          typeof item.price === "number"
+            ? item.price
+            : crownsFromFormatted(item.price_formatted) * 100;
+        return sum + unit * (Number(item.quantity) || 1);
+      }, 0);
       savePreviewCart(cart);
       toggleCart(true);
       return;

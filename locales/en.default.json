@@ -91,7 +91,15 @@
     "qty_down": "Decrease quantity",
     "preview_checkout": "Preview only. Upload this theme to Shopify to checkout.",
     "shipping_remain": "Add {{ amount }} more for free shipping",
-    "shipping_unlocked": "You unlocked free shipping"
+    "shipping_unlocked": "You unlocked free shipping",
+    "upsell_ship_1": "One more tee unlocks free shipping",
+    "upsell_ship_2": "Fill the bar — start with a tee",
+    "upsell_ship_3": "Almost there. Grab a tee for free shipping",
+    "upsell_ship_4": "Add a tee and ride free shipping home",
+    "upsell_more_1": "Complete the look with a tee",
+    "upsell_more_2": "One more piece hits different",
+    "upsell_more_3": "Tees that finish the fit",
+    "upsell_add": "Add"
   },
   "search": {
     "placeholder": "Search",

@@ -305,17 +305,48 @@
       "total": {{ 'cart.total' | t | json }},
       "shipping_remain": {{ 'cart.shipping_remain' | t | json }},
       "shipping_unlocked": {{ 'cart.shipping_unlocked' | t | json }},
+      "upsell_ship_1": {{ 'cart.upsell_ship_1' | t | json }},
+      "upsell_ship_2": {{ 'cart.upsell_ship_2' | t | json }},
+      "upsell_ship_3": {{ 'cart.upsell_ship_3' | t | json }},
+      "upsell_ship_4": {{ 'cart.upsell_ship_4' | t | json }},
+      "upsell_more_1": {{ 'cart.upsell_more_1' | t | json }},
+      "upsell_more_2": {{ 'cart.upsell_more_2' | t | json }},
+      "upsell_more_3": {{ 'cart.upsell_more_3' | t | json }},
+      "upsell_add": {{ 'cart.upsell_add' | t | json }},
+      "size": {{ 'product.size' | t | json }},
       "back": {{ 'general.accessibility.back' | t | json }},
       "menu": {{ 'general.accessibility.menu' | t | json }}
     },
+    "currency": {{ cart.currency.iso_code | default: shop.currency | json }},
+    "freeShipping": {
+      "CZK": 3000,
+      "EUR": 123
+    },
     "products": [
       {% for item in stage_products %}
+        {%- liquid
+          assign upsell_type = item.product_type | strip
+          if upsell_type == blank
+            assign title_up = item.title | upcase
+            if title_up contains 'HOODIE'
+              assign upsell_type = 'Hoodies'
+            elsif title_up contains 'ZIP'
+              assign upsell_type = 'Zip'
+            elsif title_up contains 'TEE' or title_up contains 'T-SHIRT' or title_up contains 'TRIKO'
+              assign upsell_type = 'T-Shirts'
+            else
+              assign upsell_type = 'Other'
+            endif
+          endif
+        -%}
         {
           "id": {{ item.id }},
           "handle": {{ item.handle | json }},
           "title": {{ item.title | json }},
           "url": {{ item.url | json }},
+          "type": {{ upsell_type | json }},
           "available": {{ item.available }},
+          "price": {{ item.price }},
           "price_formatted": {{ item.price | money_without_currency | append: ' CZK' | strip | json }},
           "description": {{ item.description | strip_html | json }},
           "description_html": {{ item.description | json }},
@@ -330,6 +361,7 @@
                 "id": {{ variant.id }},
                 "title": {{ variant.title | json }},
                 "available": {{ variant.available }},
+                "price": {{ variant.price }},
                 "price_formatted": {{ variant.price | money_without_currency | append: ' CZK' | strip | json }}
               }{% unless forloop.last %},{% endunless %}
             {% endfor %}
