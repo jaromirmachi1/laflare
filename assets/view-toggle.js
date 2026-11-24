@@ -14,7 +14,7 @@
     }
   };
 
-  const titleEl = document.querySelector("[data-product-title]");
+  const titleEl = document.querySelector("h2.product-title[data-product-title], .stage > [data-product-title]");
 
   const sync = () => {
     const on = body.classList.contains("is-grid");

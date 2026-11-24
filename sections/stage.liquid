@@ -60,6 +60,18 @@
           style="--x: calc({{ forloop.index0 }} * (var(--item) + var(--item-gap)))"
           aria-label="{{ 'general.accessibility.open_product' | t: title: item.title }}"
         >
+          {%- liquid
+            assign on_sale = false
+            if item.compare_at_price > item.price
+              assign on_sale = true
+            endif
+            for tag in item.tags
+              assign tag_down = tag | downcase
+              if tag_down == 'sale' or tag_down == 'akce'
+                assign on_sale = true
+              endif
+            endfor
+          -%}
           {% if item.featured_image %}
             <img
               src="{{ item.featured_image | image_url: width: 800 }}"
@@ -68,6 +80,9 @@
               height="800"
               {% if forloop.first %}fetchpriority="high"{% else %}loading="eager"{% endif %}
             >
+          {% endif %}
+          {% if on_sale and item.available %}
+            <span class="sale-pill">{{ 'product.sale' | t }}</span>
           {% endif %}
           {% unless item.available %}
             <span class="sold-pill">{{ 'product.sold_out' | t }}</span>
@@ -133,6 +148,16 @@
                 endfor
               endif
             endfor
+            assign on_sale = false
+            if item.compare_at_price > item.price
+              assign on_sale = true
+            endif
+            for tag in item.tags
+              assign tag_down = tag | downcase
+              if tag_down == 'sale' or tag_down == 'akce'
+                assign on_sale = true
+              endif
+            endfor
           -%}
           <li
             class="grid-card{% unless item.available %} is-sold{% endunless %}"
@@ -169,6 +194,9 @@
                       decoding="async"
                     >
                   {%- endif -%}
+                {%- endif -%}
+                {%- if on_sale and item.available -%}
+                  <span class="sale-pill">{{ 'product.sale' | t }}</span>
                 {%- endif -%}
                 {%- unless item.available -%}
                   <span class="sold-pill">{{ 'product.sold_out' | t }}</span>

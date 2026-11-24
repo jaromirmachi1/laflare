@@ -654,7 +654,8 @@ body.is-detail .cover-item[data-shot].is-current {
   z-index: 3;
 }
 
-.sold-pill {
+.sold-pill,
+.sale-pill {
   position: absolute;
   left: 14px;
   bottom: 14px;
@@ -665,9 +666,19 @@ body.is-detail .cover-item[data-shot].is-current {
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  z-index: 2;
 }
 
-body.is-detail .sold-pill {
+.sale-pill {
+  top: 14px;
+  bottom: auto;
+  background: var(--white);
+  color: var(--black);
+  box-shadow: inset 0 0 0 1px var(--black);
+}
+
+body.is-detail .sold-pill,
+body.is-detail .sale-pill {
   display: none;
 }
 
@@ -2164,21 +2175,13 @@ body.is-grid .sticky-atc {
   display: none;
 }
 
-/* Coverflow title must never leak into the shop-all grid. */
-body.is-grid .product-title,
-body.is-grid [data-product-title] {
+/* Coverflow title only — not grid cards (they also carry data-product-title). */
+body.is-grid h2.product-title,
+body.is-grid .stage > [data-product-title] {
   display: none !important;
   visibility: hidden !important;
   opacity: 0 !important;
   pointer-events: none !important;
-  position: absolute !important;
-  width: 1px !important;
-  height: 1px !important;
-  margin: -1px !important;
-  padding: 0 !important;
-  overflow: hidden !important;
-  clip: rect(0, 0, 0, 0) !important;
-  border: 0 !important;
 }
 
 body.is-grid .chrome--top {
@@ -2384,9 +2387,15 @@ body.is-grid .grid-view {
   opacity: 0.55;
 }
 
-.grid-card .sold-pill {
+.grid-card .sold-pill,
+.grid-card .sale-pill {
   left: 10px;
   bottom: 10px;
+}
+
+.grid-card .sale-pill {
+  top: 10px;
+  bottom: auto;
 }
 
 .grid-card__meta {
