@@ -219,7 +219,9 @@
   );
   const isPreview = data.preview === true;
 
-  const titleEl = document.querySelector("[data-product-title]");
+  const titleEl = document.querySelector(
+    "h2.product-title[data-product-title], .stage > [data-product-title]",
+  );
   const track = document.querySelector("[data-track]");
   const productItems = [...document.querySelectorAll("[data-item]")];
   const detailBar = document.querySelector("[data-detail]");
@@ -708,11 +710,20 @@
   function openDetail() {
     detail = true;
     copyOpen = true;
+    const current = product();
+    if (titleEl) {
+      titleEl.hidden = false;
+      titleEl.removeAttribute("hidden");
+      titleEl.setAttribute("aria-hidden", "false");
+      titleEl.style.opacity = "";
+      titleEl.style.visibility = "";
+      titleEl.textContent = current ? current.title : "";
+    }
     refreshUnit();
     buildGallery();
     syncDetail();
-    if (!isPreview && product()) {
-      history.replaceState(null, "", product().url);
+    if (!isPreview && current) {
+      history.replaceState(null, "", current.url);
     }
   }
 
@@ -1150,8 +1161,8 @@
         price_formatted: sizeBtn.dataset.variantPrice || "",
       },
       {
-        title: card?.dataset.productTitle || "",
-        image: card?.dataset.productImage || "",
+        title: card?.dataset.gridTitle || "",
+        image: card?.dataset.gridImage || "",
         price_formatted: sizeBtn.dataset.variantPrice || "",
         variantTitle: sizeBtn.dataset.variantTitle || sizeBtn.textContent.trim(),
       },

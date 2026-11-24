@@ -165,8 +165,8 @@
             data-type="{{ filter_type | escape }}"
             data-sizes="{{ filter_sizes | escape }}"
             data-colors="{{ filter_colors | escape }}"
-            data-product-title="{{ item.title | escape }}"
-            data-product-image="{{ item.featured_image | image_url: width: 400 | escape }}"
+            data-grid-title="{{ item.title | escape }}"
+            data-grid-image="{{ item.featured_image | image_url: width: 400 | escape }}"
           >
             <a class="grid-card__link" href="{{ item.url }}">
               <span class="grid-card__media">
