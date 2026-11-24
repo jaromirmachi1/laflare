@@ -28,7 +28,9 @@
       "account_cart": "Účet a košík",
       "open_product": "Otevřít {{ title }}",
       "loading": "Načítání",
-      "enter": "Enter"
+      "enter": "Enter",
+      "grid_view": "Mřížka",
+      "flow_view": "Coverflow"
     }
   },
   "about": {

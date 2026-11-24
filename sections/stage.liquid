@@ -10,6 +10,10 @@
   else
     assign stage_products = stage_collection.products
   endif
+  assign show_view_toggle = false
+  if request.page_type == 'index' or request.page_type == 'collection'
+    assign show_view_toggle = true
+  endif
   assign initial_handle = ''
   assign open_detail = false
   if request.page_type == 'product'
@@ -22,11 +26,19 @@
   {% render 'intro-gate' %}
 {% endif %}
 
+{%- if show_view_toggle -%}
+  <script>
+    try {
+      if (localStorage.getItem('laflare-view') === 'grid') document.body.classList.add('is-grid');
+    } catch (e) {}
+  </script>
+{%- endif -%}
+
 <main id="Main" class="stage">
   <p class="stage-loader" role="status">{{ 'general.accessibility.loading' | t }}</p>
   <header class="chrome chrome--top">
     {% render 'logo' %}
-    {% render 'chrome-actions' %}
+    {% render 'chrome-actions', view_toggle: show_view_toggle %}
   </header>
 
   <section class="coverflow" aria-label="{{ shop.name }}">
@@ -59,6 +71,52 @@
       {% endfor %}
     </div>
   </section>
+
+  {%- if show_view_toggle -%}
+    <section class="grid-view" data-grid aria-label="{{ shop.name }}">
+      <ul class="grid-view__list" role="list">
+        {%- for item in stage_products -%}
+          <li class="grid-card{% unless item.available %} is-sold{% endunless %}">
+            <a class="grid-card__link" href="{{ item.url }}">
+              <span class="grid-card__media">
+                {%- if item.featured_image -%}
+                  <img
+                    class="grid-card__img"
+                    src="{{ item.featured_image | image_url: width: 900 }}"
+                    srcset="{{ item.featured_image | image_url: width: 450 }} 450w, {{ item.featured_image | image_url: width: 900 }} 900w"
+                    sizes="(min-width: 768px) 30vw, 48vw"
+                    alt="{{ item.featured_image.alt | default: item.title | escape }}"
+                    width="900"
+                    height="900"
+                    loading="lazy"
+                    decoding="async"
+                  >
+                  {%- if item.images.size > 1 -%}
+                    <img
+                      class="grid-card__img grid-card__img--alt"
+                      src="{{ item.images[1] | image_url: width: 900 }}"
+                      alt=""
+                      width="900"
+                      height="900"
+                      loading="lazy"
+                      decoding="async"
+                    >
+                  {%- endif -%}
+                {%- endif -%}
+                {%- unless item.available -%}
+                  <span class="sold-pill">{{ 'product.sold_out' | t }}</span>
+                {%- endunless -%}
+              </span>
+              <span class="grid-card__meta">
+                <span class="grid-card__title">{{ item.title }}</span>
+                <span class="grid-card__price">{{ item.price | money_without_currency | append: ' CZK' }}</span>
+              </span>
+            </a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </section>
+  {%- endif -%}
 
   <h2 class="product-title" data-product-title></h2>
 
@@ -110,6 +168,10 @@
 {% render 'cart-overlay' %}
 
 {% render 'legals-overlay' %}
+
+{%- if show_view_toggle -%}
+  <script src="{{ 'view-toggle.js' | asset_url }}" defer></script>
+{%- endif -%}
 
 <script type="application/json" id="StageData">
   {

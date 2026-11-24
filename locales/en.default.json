@@ -28,7 +28,9 @@
       "account_cart": "Account and cart",
       "open_product": "Open {{ title }}",
       "loading": "Loading",
-      "enter": "Enter"
+      "enter": "Enter",
+      "grid_view": "Grid view",
+      "flow_view": "Coverflow view"
     }
   },
   "about": {

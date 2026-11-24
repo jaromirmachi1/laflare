@@ -6,6 +6,24 @@
   assign cart_count = cart.item_count | default: 0
 -%}
 <nav class="chrome-actions" aria-label="{{ 'general.accessibility.account_cart' | t }}">
+  {%- if view_toggle -%}
+    <button
+      type="button"
+      class="chrome-icon chrome-icon--view"
+      data-view-toggle
+      aria-pressed="false"
+      aria-label="{{ 'general.accessibility.grid_view' | t }}"
+      data-label-grid="{{ 'general.accessibility.grid_view' | t | escape }}"
+      data-label-flow="{{ 'general.accessibility.flow_view' | t | escape }}"
+    >
+      <svg class="chrome-icon__grid" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path fill="currentColor" d="M4 4h4.6v4.6H4zM9.7 4h4.6v4.6H9.7zM15.4 4H20v4.6h-4.6zM4 9.7h4.6v4.6H4zM9.7 9.7h4.6v4.6H9.7zM15.4 9.7H20v4.6h-4.6zM4 15.4h4.6V20H4zM9.7 15.4h4.6V20H9.7zM15.4 15.4H20V20h-4.6z"/>
+      </svg>
+      <svg class="chrome-icon__flow" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path fill="currentColor" d="M8 5.5h8v13H8zM2.5 7.5 6.5 8.4v7.2l-4 .9zM21.5 7.5l-4 .9v7.2l4 .9z"/>
+      </svg>
+    </button>
+  {%- endif -%}
   <a
     class="chrome-icon chrome-icon--account"
     href="{{ account_url }}"
