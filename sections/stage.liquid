@@ -14,6 +14,7 @@
   if request.page_type == 'index' or request.page_type == 'collection'
     assign show_view_toggle = true
   endif
+  assign show_intro = false
   assign initial_handle = ''
   assign open_detail = false
   if request.page_type == 'product'
@@ -27,7 +28,7 @@
   endif
 -%}
 
-{% if request.page_type == 'index' %}
+{% if show_intro and request.page_type == 'index' %}
   {% render 'intro-gate' %}
 {% endif %}
 
