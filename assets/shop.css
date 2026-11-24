@@ -1469,9 +1469,15 @@ body.is-info .product-copy.is-open {
 
 .cart-upsell {
   display: grid;
+  flex: 0 0 auto;
   gap: 10px;
-  padding-top: 10px;
-  border-top: 1px solid rgba(17, 17, 17, 0.08);
+  padding: 2px 0 12px;
+  border-bottom: 1px solid rgba(17, 17, 17, 0.08);
+  background: var(--stage);
+}
+
+.cart-upsell[hidden] {
+  display: none;
 }
 
 .cart-upsell__label {
