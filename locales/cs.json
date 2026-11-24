@@ -35,7 +35,9 @@
       "filter_category": "Kategorie",
       "filter_color": "Barva",
       "filter_size": "Velikost",
-      "filter_empty": "Žádné kousky neodpovídají filtrům"
+      "filter_empty": "Žádné kousky neodpovídají filtrům",
+      "home": "Domů",
+      "shop": "Shop"
     }
   },
   "about": {

@@ -1088,24 +1088,30 @@
     renderCart();
   }
 
-  async function addToCart() {
-    const variant = selectedVariant();
-    if (!variant?.available) return;
-    const current = product();
+  async function addVariantToCart(variant, meta = {}) {
+    if (!variant?.id || variant.available === false) return;
+    const title = meta.title || product()?.title || "";
+    const image = meta.image || product()?.images?.[0] || "";
+    const price =
+      variant.price_formatted ||
+      meta.price_formatted ||
+      product()?.price_formatted ||
+      "";
+    const sizeLabel = variant.title || meta.variantTitle || "";
     if (isPreview) {
       const cart = await getCart();
       const existing = (cart.items || []).find(
-        (item) => item.id === variant.id,
+        (item) => String(item.id) === String(variant.id),
       );
       if (existing) existing.quantity += 1;
       else {
         cart.items.push({
           key: String(variant.id),
           id: variant.id,
-          title: `${current.title} / ${variant.title}`,
+          title: sizeLabel ? `${title} / ${sizeLabel}` : title,
           quantity: 1,
-          image: current.images?.[0] || "",
-          price_formatted: variant.price_formatted || current.price_formatted,
+          image,
+          price_formatted: price,
         });
       }
       cart.item_count = cart.items.reduce(
@@ -1123,6 +1129,34 @@
     });
     toggleCart(true);
   }
+
+  async function addToCart() {
+    const variant = selectedVariant();
+    if (!variant?.available) return;
+    await addVariantToCart(variant, { title: product()?.title });
+  }
+
+  document.addEventListener("click", (event) => {
+    const sizeBtn = event.target.closest("[data-grid-add]");
+    if (!sizeBtn || sizeBtn.disabled) return;
+    event.preventDefault();
+    event.stopPropagation();
+    const card = sizeBtn.closest("[data-grid-card]");
+    addVariantToCart(
+      {
+        id: sizeBtn.dataset.variantId,
+        title: sizeBtn.dataset.variantTitle || sizeBtn.textContent.trim(),
+        available: true,
+        price_formatted: sizeBtn.dataset.variantPrice || "",
+      },
+      {
+        title: card?.dataset.productTitle || "",
+        image: card?.dataset.productImage || "",
+        price_formatted: sizeBtn.dataset.variantPrice || "",
+        variantTitle: sizeBtn.dataset.variantTitle || sizeBtn.textContent.trim(),
+      },
+    );
+  });
 
   const wheel = document.querySelector(".wheel");
   const clearWheelPress = () => {

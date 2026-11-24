@@ -35,7 +35,9 @@
       "filter_category": "Category",
       "filter_color": "Color",
       "filter_size": "Size",
-      "filter_empty": "No pieces match these filters"
+      "filter_empty": "No pieces match these filters",
+      "home": "Home",
+      "shop": "Shop"
     }
   },
   "about": {

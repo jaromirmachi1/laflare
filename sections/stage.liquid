@@ -20,6 +20,11 @@
     assign initial_handle = product.handle
     assign open_detail = true
   endif
+  if request.page_type == 'collection'
+    assign grid_crumb = stage_collection.title
+  else
+    assign grid_crumb = 'general.accessibility.shop' | t
+  endif
 -%}
 
 {% if request.page_type == 'index' %}
@@ -83,6 +88,11 @@
       data-label-size="{{ 'general.accessibility.filter_size' | t | escape }}"
       data-label-empty="{{ 'general.accessibility.filter_empty' | t | escape }}"
     >
+      <nav class="grid-crumbs" aria-label="Breadcrumb">
+        <a class="grid-crumbs__link" href="{{ routes.root_url }}">{{ 'general.accessibility.home' | t }}</a>
+        <span class="grid-crumbs__sep" aria-hidden="true">/</span>
+        <span class="grid-crumbs__current" aria-current="page">{{ grid_crumb }}</span>
+      </nav>
       <div class="grid-filters" data-grid-filters hidden></div>
       <ul class="grid-view__list" role="list">
         {%- for item in stage_products -%}
@@ -130,6 +140,8 @@
             data-type="{{ filter_type | escape }}"
             data-sizes="{{ filter_sizes | escape }}"
             data-colors="{{ filter_colors | escape }}"
+            data-product-title="{{ item.title | escape }}"
+            data-product-image="{{ item.featured_image | image_url: width: 400 | escape }}"
           >
             <a class="grid-card__link" href="{{ item.url }}">
               <span class="grid-card__media">
@@ -167,6 +179,23 @@
                 <span class="grid-card__price">{{ item.price | money_without_currency | append: ' CZK' }}</span>
               </span>
             </a>
+            {%- if item.available -%}
+              <div class="grid-card__quick" role="group" aria-label="{{ 'product.size' | t }}">
+                {%- for variant in item.variants -%}
+                  <button
+                    type="button"
+                    class="grid-card__size{% unless variant.available %} is-sold{% endunless %}"
+                    data-grid-add
+                    data-variant-id="{{ variant.id }}"
+                    data-variant-title="{{ variant.title | escape }}"
+                    data-variant-price="{{ variant.price | money_without_currency | append: ' CZK' | strip | escape }}"
+                    {% unless variant.available %}disabled aria-disabled="true"{% endunless %}
+                  >
+                    {{ variant.title }}
+                  </button>
+                {%- endfor -%}
+              </div>
+            {%- endif -%}
           </li>
         {%- endfor -%}
       </ul>
